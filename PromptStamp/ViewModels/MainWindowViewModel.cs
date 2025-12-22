@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using Prism.Mvvm;
 using PromptStamp.Models;
 using PromptStamp.Utils;
@@ -14,6 +18,11 @@ public class MainWindowViewModel : BindableBase
 
     private string commonPrompt = string.Empty;
 
+    public MainWindowViewModel()
+    {
+        SetDummies();
+    }
+
     public string CommonPrompt { get => commonPrompt; set => SetProperty(ref commonPrompt, value); }
 
     public ObservableCollection<ImagePromptGroup> ImagePromptGroups
@@ -23,4 +32,26 @@ public class MainWindowViewModel : BindableBase
     }
 
     public string Title => appVersionInfo.Title;
+
+    [Conditional("DEBUG")]
+    private void SetDummies()
+    {
+        var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        var testDirectoryPath = Path.Combine(desktopPath, "myFiles", "Tests", "RiderProjects", "PromptStamp", "images");
+        var files = Directory.GetFiles(testDirectoryPath)
+            .Select(p =>
+        {
+            var ipg = new ImagePromptGroup
+            {
+                Header = Path.GetFileNameWithoutExtension(p),
+            };
+
+            ipg.ImagePaths.Add(p);
+            return ipg;
+        });
+
+        imagePromptGroups = new ObservableCollection<ImagePromptGroup>(files);
+
+        CommonPrompt = "Common Text, Common Text, Common Text, Common Text,Common Text, Common Text,";
+    }
 }
