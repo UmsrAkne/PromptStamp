@@ -10,5 +10,7 @@ namespace PromptStamp.Models
         public string Header { get => header; set => SetProperty(ref header, value); }
 
         public ObservableCollection<string> ImagePaths { get; set; } = new ();
+
+        public ObservableCollection<DiffPrompt> DiffPrompts { get; set; } = new ();
     }
 }
