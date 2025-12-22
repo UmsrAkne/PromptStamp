@@ -5,6 +5,7 @@ using PromptStamp.Utils;
 
 namespace PromptStamp.ViewModels;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new ();
@@ -23,5 +24,3 @@ public class MainWindowViewModel : BindableBase
 
     public string Title => appVersionInfo.Title;
 }
-
-// ReSharper disable once ClassNeverInstantiated.Global
