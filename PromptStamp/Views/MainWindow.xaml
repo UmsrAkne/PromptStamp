@@ -39,13 +39,18 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <TextBlock
+            <TextBox
                 Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Height="80"
                 Background="LightPink"
-                Text="{Binding CommonPrompt}" />
+                Text="{Binding CommonPrompt}"
+                VerticalScrollBarVisibility="Visible">
+                <i:Interaction.Behaviors>
+                    <behaviors:PngMetadataDropBehavior />
+                </i:Interaction.Behaviors>
+            </TextBox>
 
             <ListBox
                 Grid.Row="1"
