@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using System.Collections.ObjectModel;
+using Prism.Mvvm;
 
 namespace PromptStamp.Models
 {
@@ -7,5 +8,7 @@ namespace PromptStamp.Models
         private string header;
 
         public string Header { get => header; set => SetProperty(ref header, value); }
+
+        public ObservableCollection<string> ImagePaths { get; set; } = new ();
     }
 }

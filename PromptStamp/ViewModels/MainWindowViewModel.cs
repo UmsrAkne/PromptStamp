@@ -9,7 +9,7 @@ public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new ();
 
-    private ObservableCollection<ImagePromptGroup> imagePromptGroups;
+    private ObservableCollection<ImagePromptGroup> imagePromptGroups = new ();
 
     private string commonPrompt = string.Empty;
 
