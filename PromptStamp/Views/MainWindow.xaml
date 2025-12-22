@@ -53,6 +53,7 @@
             </TextBox>
 
             <ListBox
+                x:Name="ImagePromptGroupList"
                 Grid.Row="1"
                 Grid.Column="0"
                 Width="300"
@@ -78,13 +79,20 @@
             </ListBox>
 
             <DockPanel Grid.Row="1" Grid.Column="1">
-                <StackPanel DockPanel.Dock="Top">
-                    <TextBlock Text="Prompt:" />
-                    <TextBox
-                        Height="120"
-                        DockPanel.Dock="Top"
-                        Text="Diff Prompt" />
-                </StackPanel>
+                <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem.DiffPrompts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:DiffPrompt}">
+                            <StackPanel>
+                                <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Key}" />
+                                <TextBox
+                                    Height="120"
+                                    DockPanel.Dock="Top"
+                                    FontSize="{StaticResource CommonFontSize}"
+                                    Text="{Binding Prompt}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
                 <ListBox Background="LightCyan" DockPanel.Dock="Bottom" />
             </DockPanel>

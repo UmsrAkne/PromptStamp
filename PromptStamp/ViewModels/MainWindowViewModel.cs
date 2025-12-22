@@ -47,6 +47,12 @@ public class MainWindowViewModel : BindableBase
             };
 
             ipg.ImagePaths.Add(p);
+            ipg.DiffPrompts.Add(new DiffPrompt()
+            {
+                Key = "Test Key1",
+                Prompt = "Test Prompt1",
+            });
+
             return ipg;
         });
 
