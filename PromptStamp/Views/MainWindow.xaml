@@ -7,12 +7,62 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:PromptStamp.ViewModels"
     Title="{Binding Title}"
-    Width="525"
+    Width="800"
     Height="350"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Height="80"
+                Background="LightPink"
+                Text="{Binding CommonPrompt}" />
+
+            <ListBox
+                Grid.Row="1"
+                Grid.Column="0"
+                Width="300"
+                Background="LightGoldenrodYellow"
+                ItemsSource="{Binding ImagePromptGroups}" />
+
+            <DockPanel Grid.Row="1" Grid.Column="1">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Prompt:" />
+                    <TextBox
+                        Height="120"
+                        DockPanel.Dock="Top"
+                        Text="Diff Prompt" />
+                </StackPanel>
+
+                <ListBox Background="LightCyan" DockPanel.Dock="Bottom" />
+            </DockPanel>
+
+        </Grid>
     </Grid>
 </Window>
