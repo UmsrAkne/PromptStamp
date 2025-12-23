@@ -45,7 +45,7 @@
                 Grid.ColumnSpan="2"
                 Height="80"
                 Background="LightPink"
-                Text="{Binding CommonPrompt}"
+                Text="{Binding CommonPrompt, UpdateSourceTrigger=PropertyChanged}"
                 VerticalScrollBarVisibility="Visible">
                 <i:Interaction.Behaviors>
                     <behaviors:PngMetadataDropBehavior />
@@ -88,7 +88,7 @@
                                     Height="120"
                                     DockPanel.Dock="Top"
                                     FontSize="{StaticResource CommonFontSize}"
-                                    Text="{Binding Prompt}" />
+                                    Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
