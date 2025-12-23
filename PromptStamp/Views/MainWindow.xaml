@@ -85,24 +85,47 @@
                 </i:Interaction.Behaviors>
             </ListBox>
 
-            <DockPanel Grid.Row="1" Grid.Column="1">
-                <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem.DiffPrompts}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type models:DiffPrompt}">
-                            <StackPanel>
-                                <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Key}" />
-                                <TextBox
-                                    Height="120"
-                                    DockPanel.Dock="Top"
-                                    FontSize="{StaticResource CommonFontSize}"
-                                    Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
 
-                <ListBox Background="LightCyan" DockPanel.Dock="Bottom" />
-            </DockPanel>
+                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem.DiffPrompts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:DiffPrompt}">
+                                <StackPanel>
+                                    <TextBox FontSize="{StaticResource CommonFontSize}" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox
+                                        Height="120"
+                                        DockPanel.Dock="Top"
+                                        FontSize="{StaticResource CommonFontSize}"
+                                        Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="1">
+                    <Button
+                        Width="200"
+                        Height="25"
+                        Margin="3"
+                        HorizontalAlignment="Right"
+                        Command="{Binding AddDiffPromptCommand}"
+                        CommandParameter="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem}"
+                        Content="Add Item" />
+
+                    <ListBox
+                        Grid.Row="1"
+                        Background="LightCyan"
+                        DockPanel.Dock="Bottom" />
+
+                </StackPanel>
+            </Grid>
 
         </Grid>
     </Grid>

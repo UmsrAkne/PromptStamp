@@ -51,6 +51,16 @@ public class MainWindowViewModel : BindableBase
         }
     });
 
+    public DelegateCommand<ImagePromptGroup> AddDiffPromptCommand => new ((param) =>
+    {
+        if (param == null)
+        {
+            return;
+        }
+
+        param.DiffPrompts.Add(new DiffPrompt());
+    });
+
     private IAppLogger Logger { get; }
 
     [Conditional("DEBUG")]
