@@ -7,6 +7,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using PromptStamp.Models;
 using PromptStamp.Utils;
+using PromptStamp.Utils.Log;
 
 namespace PromptStamp.ViewModels;
 
@@ -21,6 +22,13 @@ public class MainWindowViewModel : BindableBase
 
     public MainWindowViewModel()
     {
+        SetDummies();
+    }
+
+    public MainWindowViewModel(IAppLogger logger)
+    {
+        Logger = logger;
+        Logger.Info("MainViewModel initialized");
         SetDummies();
     }
 
@@ -41,6 +49,8 @@ public class MainWindowViewModel : BindableBase
             imagePromptGroup.ApplyDiffPrompt(CommonPrompt);
         }
     });
+
+    private IAppLogger Logger { get; }
 
     [Conditional("DEBUG")]
     private void SetDummies()

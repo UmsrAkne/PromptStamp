@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Prism.Ioc;
+using PromptStamp.Utils.Log;
 using PromptStamp.Views;
 
 namespace PromptStamp;
@@ -16,5 +17,6 @@ public partial class App
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
+        containerRegistry.RegisterSingleton<IAppLogger, InMemoryAppLogger>();
     }
 }
