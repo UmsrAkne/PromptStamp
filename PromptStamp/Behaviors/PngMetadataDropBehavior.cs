@@ -8,13 +8,12 @@ using PromptStamp.ViewModels;
 
 namespace PromptStamp.Behaviors
 {
-    public class PngMetadataDropBehavior : Behavior<TextBox>
+    public class PngMetadataDropBehavior : Behavior<ContentControl>
     {
         protected override void OnAttached()
         {
             base.OnAttached();
 
-            // TextBox の場合、 Drop, DragOver は内部で処理されてしまうため、Preview の方をハンドルする。
             AssociatedObject.AllowDrop = true;
             AssociatedObject.PreviewDrop += OnDrop;
             AssociatedObject.PreviewDragOver += OnDragOver;

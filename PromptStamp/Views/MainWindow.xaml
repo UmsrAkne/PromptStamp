@@ -47,18 +47,51 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <TextBox
+            <ContentControl
                 Grid.Row="0"
                 Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Height="80"
-                Background="LightPink"
-                Text="{Binding CommonPrompt, UpdateSourceTrigger=PropertyChanged}"
-                VerticalScrollBarVisibility="Visible">
+                Grid.ColumnSpan="2">
                 <i:Interaction.Behaviors>
                     <behaviors:PngMetadataDropBehavior />
                 </i:Interaction.Behaviors>
-            </TextBox>
+
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <TextBox
+                                    Height="80"
+                                    Background="LightPink"
+                                    Text="{Binding CommonPrompt, UpdateSourceTrigger=PropertyChanged}"
+                                    VerticalScrollBarVisibility="Visible" />
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CommonPrompt}" Value="">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Border Background="#20AAAAAA" CornerRadius="4">
+                                            <StackPanel
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Opacity="0.6">
+                                                <TextBlock Text="No Prompt" />
+                                                <TextBlock
+                                                    Margin="0,4,0,0"
+                                                    FontSize="10"
+                                                    Text="Drop PNG here" />
+                                            </StackPanel>
+                                        </Border>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+
+
+            </ContentControl>
 
             <ContentControl Grid.Row="1" Grid.Column="0">
                 <i:Interaction.Behaviors>
