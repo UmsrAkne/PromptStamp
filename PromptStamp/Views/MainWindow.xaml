@@ -60,32 +60,68 @@
                 </i:Interaction.Behaviors>
             </TextBox>
 
-            <ListBox
-                x:Name="ImagePromptGroupList"
-                Grid.Row="1"
-                Grid.Column="0"
-                Width="300"
-                Background="LightGoldenrodYellow"
-                ItemsSource="{Binding PromptGroupListViewModel.Items}"
-                SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type models:ImagePromptGroup}">
-                        <DataTemplate.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
-                            </Style>
-                        </DataTemplate.Resources>
-
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Header}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-
+            <ContentControl Grid.Row="1" Grid.Column="0">
                 <i:Interaction.Behaviors>
                     <behaviors:DragDropPngToImagePromptGroupsBehavior />
                 </i:Interaction.Behaviors>
-            </ListBox>
+
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <!-- 通常 -->
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <ListBox
+                                    x:Name="ImagePromptGroupList"
+                                    Width="300"
+                                    Background="LightGoldenrodYellow"
+                                    ItemsSource="{Binding PromptGroupListViewModel.Items}"
+                                    SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type models:ImagePromptGroup}">
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+                                                </Style>
+                                            </DataTemplate.Resources>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Header}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+
+                                </ListBox>
+
+                            </Setter.Value>
+                        </Setter>
+
+                        <!-- 空状態 -->
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding PromptGroupListViewModel.Items.Count}" Value="0">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Border
+                                            Width="300"
+                                            Background="#20AAAAAA"
+                                            CornerRadius="4">
+                                            <StackPanel
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Opacity="0.6">
+                                                <TextBlock Text="No Prompt Groups" />
+                                                <TextBlock
+                                                    Margin="0,4,0,0"
+                                                    FontSize="10"
+                                                    Text="Drop PNG here" />
+                                            </StackPanel>
+                                        </Border>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
 
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.RowDefinitions>

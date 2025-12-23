@@ -12,7 +12,7 @@ using PromptStamp.ViewModels;
 
 namespace PromptStamp.Behaviors
 {
-    public class DragDropPngToImagePromptGroupsBehavior : Behavior<ListBox>
+    public class DragDropPngToImagePromptGroupsBehavior : Behavior<ContentControl>
     {
         protected override void OnAttached()
         {
