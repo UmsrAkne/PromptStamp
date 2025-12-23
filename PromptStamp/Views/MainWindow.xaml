@@ -125,6 +125,16 @@
                         Background="LightCyan"
                         DockPanel.Dock="Bottom"
                         ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}">
+                        <i:Interaction.Behaviors>
+                            <behaviors:ImageListCutPasteBehavior />
+                        </i:Interaction.Behaviors>
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type system:String}">
                                 <StackPanel Orientation="Horizontal">

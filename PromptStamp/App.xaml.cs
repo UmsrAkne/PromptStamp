@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Prism.Ioc;
+using PromptStamp.Behaviors;
 using PromptStamp.Factories;
 using PromptStamp.Utils;
 using PromptStamp.Utils.Log;
@@ -25,6 +26,7 @@ public partial class App
 
         ImagePromptGroupFactory.Logger = logger;
         MetadataWriter.Logger = logger;
+        ImageListCutPasteBehavior.Logger = logger;
 
         logger.Info("MetadataWriter and ImagePromptGroupFactory logger initialized");
     }
