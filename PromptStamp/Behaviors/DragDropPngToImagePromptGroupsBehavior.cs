@@ -109,7 +109,7 @@ namespace PromptStamp.Behaviors
 
             if (AssociatedObject?.DataContext is MainWindowViewModel vm)
             {
-                vm.ImagePromptGroups = new ObservableCollection<ImagePromptGroup>(groups);
+                vm.PromptGroupListViewModel.Items = new ObservableCollection<ImagePromptGroup>(groups);
             }
         }
     }

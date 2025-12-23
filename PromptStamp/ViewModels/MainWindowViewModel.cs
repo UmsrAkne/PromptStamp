@@ -17,8 +17,6 @@ public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new ();
 
-    private ObservableCollection<ImagePromptGroup> imagePromptGroups = new ();
-
     private string commonPrompt = string.Empty;
 
     public MainWindowViewModel()
@@ -35,17 +33,13 @@ public class MainWindowViewModel : BindableBase
 
     public string CommonPrompt { get => commonPrompt; set => SetProperty(ref commonPrompt, value); }
 
-    public ObservableCollection<ImagePromptGroup> ImagePromptGroups
-    {
-        get => imagePromptGroups;
-        set => SetProperty(ref imagePromptGroups, value);
-    }
+    public PromptGroupListViewModel PromptGroupListViewModel { get; set; } = new ();
 
     public string Title => appVersionInfo.Title;
 
     public DelegateCommand ApplyDiffAllCommand => new (() =>
     {
-        foreach (var imagePromptGroup in ImagePromptGroups)
+        foreach (var imagePromptGroup in PromptGroupListViewModel.Items)
         {
             imagePromptGroup.ApplyDiffPrompt(CommonPrompt);
         }
@@ -84,7 +78,7 @@ public class MainWindowViewModel : BindableBase
             return ipg;
         });
 
-        imagePromptGroups = new ObservableCollection<ImagePromptGroup>(files);
+        PromptGroupListViewModel.Items = new ObservableCollection<ImagePromptGroup>(files);
 
         CommonPrompt = "Common Text, Common Text, Common Text, Common Text,Common Text, Common Text,";
     }

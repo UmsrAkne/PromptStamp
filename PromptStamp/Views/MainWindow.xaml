@@ -66,7 +66,8 @@
                 Grid.Column="0"
                 Width="300"
                 Background="LightGoldenrodYellow"
-                ItemsSource="{Binding ImagePromptGroups}">
+                ItemsSource="{Binding PromptGroupListViewModel.Items}"
+                SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:ImagePromptGroup}">
                         <DataTemplate.Resources>
@@ -93,7 +94,7 @@
                 </Grid.RowDefinitions>
 
                 <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible">
-                    <ItemsControl ItemsSource="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem.DiffPrompts}">
+                    <ItemsControl ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.DiffPrompts}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:DiffPrompt}">
                                 <StackPanel>
@@ -117,13 +118,13 @@
                         Margin="3"
                         HorizontalAlignment="Right"
                         Command="{Binding AddDiffPromptCommand}"
-                        CommandParameter="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem}"
+                        CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
                         Content="Add Item" />
 
                     <ListBox
                         Background="LightCyan"
                         DockPanel.Dock="Bottom"
-                        ItemsSource="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem.ImagePaths}">
+                        ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}">
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type system:String}">
                                 <StackPanel Orientation="Horizontal">
