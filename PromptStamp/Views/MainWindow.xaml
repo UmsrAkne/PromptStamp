@@ -16,6 +16,13 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
+    <Window.InputBindings>
+        <KeyBinding
+            Key="S"
+            Command="{Binding ApplyDiffAllCommand}"
+            Modifiers="Control+Shift" />
+    </Window.InputBindings>
+
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Prism.Commands;
 using Prism.Mvvm;
 using PromptStamp.Models;
 using PromptStamp.Utils;
@@ -32,6 +33,14 @@ public class MainWindowViewModel : BindableBase
     }
 
     public string Title => appVersionInfo.Title;
+
+    public DelegateCommand ApplyDiffAllCommand => new (() =>
+    {
+        foreach (var imagePromptGroup in ImagePromptGroups)
+        {
+            imagePromptGroup.ApplyDiffPrompt(CommonPrompt);
+        }
+    });
 
     [Conditional("DEBUG")]
     private void SetDummies()
