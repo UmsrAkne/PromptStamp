@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:PromptStamp.Models"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:PromptStamp.ViewModels"
     Title="{Binding Title}"
     Width="800"
@@ -120,9 +121,20 @@
                         Content="Add Item" />
 
                     <ListBox
-                        Grid.Row="1"
                         Background="LightCyan"
-                        DockPanel.Dock="Bottom" />
+                        DockPanel.Dock="Bottom"
+                        ItemsSource="{Binding ElementName=ImagePromptGroupList, Path=SelectedItem.ImagePaths}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type system:String}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image
+                                        Height="100"
+                                        Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                        Stretch="Uniform" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
                 </StackPanel>
             </Grid>
