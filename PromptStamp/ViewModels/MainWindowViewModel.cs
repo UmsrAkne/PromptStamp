@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
+using PromptStamp.Factories;
 using PromptStamp.Models;
 using PromptStamp.Utils;
 using PromptStamp.Utils.Log;
@@ -59,11 +60,9 @@ public class MainWindowViewModel : BindableBase
         var testDirectoryPath = Path.Combine(desktopPath, "myFiles", "Tests", "RiderProjects", "PromptStamp", "images");
         var files = Directory.GetFiles(testDirectoryPath)
             .Select(p =>
-        {
-            var ipg = new ImagePromptGroup
             {
-                Header = Path.GetFileNameWithoutExtension(p),
-            };
+            var ipg = ImagePromptGroupFactory.Create();
+            ipg.Header = Path.GetFileNameWithoutExtension(p);
 
             ipg.ImagePaths.Add(p);
             ipg.DiffPrompts.Add(new DiffPrompt()

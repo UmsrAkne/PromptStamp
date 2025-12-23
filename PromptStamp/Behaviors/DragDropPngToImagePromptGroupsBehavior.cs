@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
+using PromptStamp.Factories;
 using PromptStamp.Models;
 using PromptStamp.ViewModels;
 
@@ -99,13 +100,11 @@ namespace PromptStamp.Behaviors
             var groups = new List<ImagePromptGroup>();
             foreach (var file in pngFiles)
             {
-                var group = new ImagePromptGroup
-                {
-                    Header = Path.GetFileNameWithoutExtension(file),
-                    ImagePaths = new ObservableCollection<string> { file, },
-                };
+                var ig = ImagePromptGroupFactory.Create();
+                ig.Header = Path.GetFileNameWithoutExtension(file);
+                ig.ImagePaths = new ObservableCollection<string> { file, };
 
-                groups.Add(group);
+                groups.Add(ig);
             }
 
             if (AssociatedObject?.DataContext is MainWindowViewModel vm)
