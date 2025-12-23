@@ -2,17 +2,223 @@
     x:Class="PromptStamp.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:PromptStamp.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:PromptStamp.Models"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:PromptStamp.ViewModels"
     Title="{Binding Title}"
-    Width="525"
+    Width="800"
     Height="350"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
+
+    <Window.InputBindings>
+        <KeyBinding
+            Key="S"
+            Command="{Binding ApplyDiffAllCommand}"
+            Modifiers="Control+Shift" />
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <ContentControl
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+                <i:Interaction.Behaviors>
+                    <behaviors:PngMetadataDropBehavior />
+                </i:Interaction.Behaviors>
+
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <TextBox
+                                    Height="80"
+                                    Background="LightPink"
+                                    Text="{Binding CommonPrompt, UpdateSourceTrigger=PropertyChanged}"
+                                    VerticalScrollBarVisibility="Visible" />
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CommonPrompt}" Value="">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Border Background="#20AAAAAA" CornerRadius="4">
+                                            <StackPanel
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Opacity="0.6">
+                                                <TextBlock Text="No Prompt" />
+                                                <TextBlock
+                                                    Margin="0,4,0,0"
+                                                    FontSize="10"
+                                                    Text="Drop PNG here" />
+                                            </StackPanel>
+                                        </Border>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+
+
+            </ContentControl>
+
+            <ContentControl Grid.Row="1" Grid.Column="0">
+                <i:Interaction.Behaviors>
+                    <behaviors:DragDropPngToImagePromptGroupsBehavior />
+                </i:Interaction.Behaviors>
+
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <!-- 通常 -->
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <ListBox
+                                    x:Name="ImagePromptGroupList"
+                                    Width="300"
+                                    Background="LightGoldenrodYellow"
+                                    ItemsSource="{Binding PromptGroupListViewModel.Items}"
+                                    SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type models:ImagePromptGroup}">
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+                                                </Style>
+                                            </DataTemplate.Resources>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Header}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+
+                                </ListBox>
+
+                            </Setter.Value>
+                        </Setter>
+
+                        <!-- 空状態 -->
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding PromptGroupListViewModel.Items.Count}" Value="0">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Border
+                                            Width="300"
+                                            Background="#20AAAAAA"
+                                            CornerRadius="4">
+                                            <StackPanel
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Opacity="0.6">
+                                                <TextBlock Text="No Prompt Groups" />
+                                                <TextBlock
+                                                    Margin="0,4,0,0"
+                                                    FontSize="10"
+                                                    Text="Drop PNG here" />
+                                            </StackPanel>
+                                        </Border>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
+
+                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.DiffPrompts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:DiffPrompt}">
+                                <StackPanel>
+                                    <TextBox FontSize="{StaticResource CommonFontSize}" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox
+                                        Height="120"
+                                        DockPanel.Dock="Top"
+                                        FontSize="{StaticResource CommonFontSize}"
+                                        Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="1">
+                    <Button
+                        Width="200"
+                        Height="25"
+                        Margin="3"
+                        HorizontalAlignment="Right"
+                        Command="{Binding AddDiffPromptCommand}"
+                        CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
+                        Content="Add Item" />
+
+                    <ListBox
+                        Background="LightCyan"
+                        DockPanel.Dock="Bottom"
+                        ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}">
+                        <i:Interaction.Behaviors>
+                            <behaviors:ImageListCutPasteBehavior />
+                        </i:Interaction.Behaviors>
+
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type system:String}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image
+                                        Height="100"
+                                        Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                        Stretch="Uniform" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </StackPanel>
+            </Grid>
+
+        </Grid>
     </Grid>
 </Window>
