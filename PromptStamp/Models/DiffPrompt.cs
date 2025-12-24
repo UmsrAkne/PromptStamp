@@ -10,5 +10,14 @@ namespace PromptStamp.Models
         public string Key { get => key; set => SetProperty(ref key, value); }
 
         public string Prompt { get => prompt; set => SetProperty(ref prompt, value); }
+
+        public DiffPrompt Clone()
+        {
+            return new DiffPrompt()
+            {
+                Key = Key,
+                Prompt = Prompt,
+            };
+        }
     }
 }

@@ -42,5 +42,38 @@ namespace PromptStamp.Models
 
             Logger.Info("ApplyDiffPrompt completed");
         }
+
+        /// <summary>
+        /// Adds a DiffPrompt to this ImagePromptGroup if possible.
+        /// </summary>
+        /// <param name="prompt">The DiffPrompt to add.</param>
+        /// <returns>
+        /// <c>true</c> if the prompt was successfully added to the group;
+        /// <c>false</c> if the prompt was not added because the key is empty
+        /// or a DiffPrompt with the same normalized key already exists in this group.
+        /// </returns>
+        /// <remarks>
+        /// This method does not throw exceptions for validation failures.
+        /// Failing to add a prompt (e.g., due to duplicate keys) is considered a valid outcome
+        /// and will be handled by logging and UI notifications.
+        /// </remarks>
+        public bool TryAddDiffPrompt(DiffPrompt prompt)
+        {
+            if (string.IsNullOrWhiteSpace(prompt.Key))
+            {
+                Logger.Warn($"ImagePromptGroup({Header}): prompt.Key is empty.");
+                return false;
+            }
+
+            var normalizeKeys = DiffPrompts.Select(dp => dp.Key.Trim()).Distinct();
+            if (normalizeKeys.Contains(prompt.Key.Trim()))
+            {
+                Logger.Warn($"ImagePromptGroup({Header}): Duplicate key: {prompt.Key}");
+                return false;
+            }
+
+            DiffPrompts.Add(prompt);
+            return true;
+        }
     }
 }
