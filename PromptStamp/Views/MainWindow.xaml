@@ -12,8 +12,9 @@
     xmlns:viewModels="clr-namespace:PromptStamp.ViewModels"
     Title="{Binding Title}"
     Width="800"
-    Height="350"
+    Height="600"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+    d:DesignHeight="480"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
@@ -38,6 +39,7 @@
 
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
@@ -89,11 +91,32 @@
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
-
-
             </ContentControl>
 
-            <ContentControl Grid.Row="1" Grid.Column="0">
+            <Expander
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                IsExpanded="True">
+                <Expander.Header>
+                    <TextBlock Margin="3" Text="Diff Prompt" />
+                </Expander.Header>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="KeyWord: " />
+                        <TextBox Width="250" Text="{Binding PendingDiffPrompt.Key}" />
+                    </StackPanel>
+                    <TextBox Height="120" Text="{Binding PendingDiffPrompt.Prompt}" />
+                    <Button
+                        Width="240"
+                        Height="25"
+                        HorizontalAlignment="Right"
+                        Command="{Binding AddDiffPromptAllCommand}"
+                        Content="Apply DiffPrompt to All Groups" />
+                </StackPanel>
+            </Expander>
+
+            <ContentControl Grid.Row="2" Grid.Column="0">
                 <i:Interaction.Behaviors>
                     <behaviors:DragDropPngToImagePromptGroupsBehavior />
                 </i:Interaction.Behaviors>
@@ -156,7 +179,7 @@
                 </ContentControl.Style>
             </ContentControl>
 
-            <Grid Grid.Row="1" Grid.Column="1">
+            <Grid Grid.Row="2" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="120" />
