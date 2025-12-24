@@ -18,6 +18,7 @@ public class MainWindowViewModel : BindableBase
     private readonly AppVersionInfo appVersionInfo = new ();
 
     private string commonPrompt = string.Empty;
+    private DiffPrompt pendingDiffPrompt = new ();
 
     public MainWindowViewModel()
     {
@@ -35,6 +36,12 @@ public class MainWindowViewModel : BindableBase
 
     public PromptGroupListViewModel PromptGroupListViewModel { get; set; } = new ();
 
+    public DiffPrompt PendingDiffPrompt
+    {
+        get => pendingDiffPrompt;
+        set => SetProperty(ref pendingDiffPrompt, value);
+    }
+
     public string Title => appVersionInfo.Title;
 
     public DelegateCommand ApplyDiffAllCommand => new (() =>
@@ -42,6 +49,17 @@ public class MainWindowViewModel : BindableBase
         foreach (var imagePromptGroup in PromptGroupListViewModel.Items)
         {
             imagePromptGroup.ApplyDiffPrompt(CommonPrompt);
+        }
+    });
+
+    public DelegateCommand AddDiffPromptAllCommand => new DelegateCommand(() =>
+    {
+        var anyAdded = PromptGroupListViewModel.Items
+            .Select(imagePromptGroup => imagePromptGroup.TryAddDiffPrompt(PendingDiffPrompt.Clone())).ToList();
+
+        if (anyAdded.Any(b => b))
+        {
+            PendingDiffPrompt = new DiffPrompt();
         }
     });
 
@@ -69,7 +87,7 @@ public class MainWindowViewModel : BindableBase
             ipg.Header = Path.GetFileNameWithoutExtension(p);
 
             ipg.ImagePaths.Add(p);
-            ipg.DiffPrompts.Add(new DiffPrompt()
+            ipg.TryAddDiffPrompt(new DiffPrompt()
             {
                 Key = "Test Key1",
                 Prompt = "Test Prompt1",
