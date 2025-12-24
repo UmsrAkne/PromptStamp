@@ -42,6 +42,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -241,6 +242,37 @@
 
                 </StackPanel>
             </Grid>
+
+            <Expander
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                IsExpanded="False">
+                <Expander.Header>
+                    <TextBlock Margin="3" Text="Application Logs" />
+                </Expander.Header>
+                <Border BorderBrush="#DDD" BorderThickness="1">
+                    <ScrollViewer Height="120" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding LogEntries}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="2,1">
+                                        <TextBlock
+                                            Width="140"
+                                            Foreground="Gray"
+                                            Text="{Binding Timestamp}" />
+                                        <TextBlock
+                                            Width="60"
+                                            Margin="6,0"
+                                            Text="{Binding Level}" />
+                                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Expander>
 
         </Grid>
     </Grid>

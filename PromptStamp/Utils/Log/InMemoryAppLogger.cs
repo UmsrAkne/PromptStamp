@@ -25,7 +25,7 @@ namespace PromptStamp.Utils.Log
         private void Add(string level, string message)
         {
             var entry = new LogEntry(DateTime.Now, level, message);
-            Entries.Add(entry);
+            Entries.Insert(0, entry);
             Console.WriteLine($"{entry.Timestamp} [{level}] {message}");
         }
     }
