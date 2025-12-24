@@ -73,7 +73,7 @@ public class MainWindowViewModel : BindableBase
         param.DiffPrompts.Add(new DiffPrompt());
     });
 
-    private IAppLogger Logger { get; }
+    public IAppLogger Logger { get; }
 
     [Conditional("DEBUG")]
     private void SetDummies()
