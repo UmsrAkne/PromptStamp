@@ -5,7 +5,7 @@ namespace PromptStamp.Utils.Log
 {
     public class InMemoryAppLogger : IAppLogger
     {
-        public ObservableCollection<LogEntry> Entries { get; } = new ();
+        public ObservableCollection<LogEntry> LogEntries { get; } = new ();
 
         public void Info(string message)
         {
@@ -25,7 +25,7 @@ namespace PromptStamp.Utils.Log
         private void Add(string level, string message)
         {
             var entry = new LogEntry(DateTime.Now, level, message);
-            Entries.Insert(0, entry);
+            LogEntries.Insert(0, entry);
             Console.WriteLine($"{entry.Timestamp} [{level}] {message}");
         }
     }

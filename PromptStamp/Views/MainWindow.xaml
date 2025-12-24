@@ -253,7 +253,7 @@
                 </Expander.Header>
                 <Border BorderBrush="#DDD" BorderThickness="1">
                     <ScrollViewer Height="120" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding LogEntries}">
+                        <ItemsControl ItemsSource="{Binding Logger.LogEntries}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel Margin="2,1">

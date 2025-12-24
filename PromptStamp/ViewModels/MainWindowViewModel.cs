@@ -19,7 +19,6 @@ public class MainWindowViewModel : BindableBase
 
     private string commonPrompt = string.Empty;
     private DiffPrompt pendingDiffPrompt = new ();
-    private ObservableCollection<LogEntry> logEntries = new ();
 
     public MainWindowViewModel()
     {
@@ -29,11 +28,6 @@ public class MainWindowViewModel : BindableBase
     public MainWindowViewModel(IAppLogger logger)
     {
         Logger = logger;
-        if (logger is InMemoryAppLogger inMemory)
-        {
-            LogEntries = inMemory.Entries;
-        }
-
         Logger.Info("MainViewModel initialized");
         SetDummies();
     }
@@ -46,12 +40,6 @@ public class MainWindowViewModel : BindableBase
     {
         get => pendingDiffPrompt;
         set => SetProperty(ref pendingDiffPrompt, value);
-    }
-
-    public ObservableCollection<LogEntry> LogEntries
-    {
-        get => logEntries;
-        private set => SetProperty(ref logEntries, value);
     }
 
     public string Title => appVersionInfo.Title;
@@ -85,7 +73,7 @@ public class MainWindowViewModel : BindableBase
         param.DiffPrompts.Add(new DiffPrompt());
     });
 
-    private IAppLogger Logger { get; }
+    public IAppLogger Logger { get; }
 
     [Conditional("DEBUG")]
     private void SetDummies()
