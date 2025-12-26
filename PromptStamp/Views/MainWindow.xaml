@@ -197,6 +197,12 @@
                                         DockPanel.Dock="Top"
                                         FontSize="{StaticResource CommonFontSize}"
                                         Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Margin="0,4,0,8"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding DataContext.PromptGroupListViewModel.RemoveDiffPromptCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Delete" />
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

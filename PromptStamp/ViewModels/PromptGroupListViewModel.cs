@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Prism.Commands;
 using Prism.Mvvm;
 using PromptStamp.Models;
 
@@ -21,5 +22,18 @@ namespace PromptStamp.ViewModels
             get => selectedItem;
             set => SetProperty(ref selectedItem, value);
         }
+
+        public DelegateCommand<DiffPrompt> RemoveDiffPromptCommand => new(prompt =>
+        {
+            if (prompt == null)
+            {
+                return;
+            }
+
+            if (SelectedItem.DiffPrompts.Contains(prompt))
+            {
+                SelectedItem.DiffPrompts.Remove(prompt);
+            }
+        });
     }
 }
