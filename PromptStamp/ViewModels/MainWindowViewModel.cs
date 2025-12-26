@@ -29,12 +29,13 @@ public class MainWindowViewModel : BindableBase
     {
         Logger = logger;
         Logger.Info("MainViewModel initialized");
+        PromptGroupListViewModel = new PromptGroupListViewModel(Logger);
         SetDummies();
     }
 
     public string CommonPrompt { get => commonPrompt; set => SetProperty(ref commonPrompt, value); }
 
-    public PromptGroupListViewModel PromptGroupListViewModel { get; set; } = new ();
+    public PromptGroupListViewModel PromptGroupListViewModel { get; }
 
     public DiffPrompt PendingDiffPrompt
     {

@@ -16,6 +16,8 @@
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     d:DesignHeight="480"
     prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="#F5F6F8"
+    FontSize="{StaticResource CommonFontSize}"
     mc:Ignorable="d">
 
     <Window.InputBindings>
@@ -26,6 +28,22 @@
     </Window.InputBindings>
 
     <Window.Resources>
+
+        <Thickness x:Key="SectionMargin">0,0,0,12</Thickness>
+
+        <Style x:Key="SectionBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Margin" Value="{StaticResource SectionMargin}" />
+        </Style>
+
+        <Style x:Key="SectionHeaderText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
         </Style>
@@ -62,11 +80,28 @@
                     <Style TargetType="ContentControl">
                         <Setter Property="Content">
                             <Setter.Value>
-                                <TextBox
-                                    Height="80"
-                                    Background="LightPink"
-                                    Text="{Binding CommonPrompt, UpdateSourceTrigger=PropertyChanged}"
-                                    VerticalScrollBarVisibility="Visible" />
+                                <Border Style="{StaticResource SectionBorderStyle}">
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource SectionHeaderText}" Text="Common Prompt" />
+
+                                        <Border
+                                            Padding="2,0"
+                                            BorderBrush="Black"
+                                            BorderThickness="1"
+                                            CornerRadius="5">
+
+                                            <TextBox
+                                                MinHeight="80"
+                                                AcceptsReturn="True"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Text="{Binding CommonPrompt}"
+                                                TextWrapping="Wrap"
+                                                VerticalScrollBarVisibility="Auto" />
+
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
                             </Setter.Value>
                         </Setter>
 
@@ -98,6 +133,8 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
+                Margin="0,8,0,0"
+                FontWeight="SemiBold"
                 IsExpanded="True">
                 <Expander.Header>
                     <TextBlock Margin="3" Text="Diff Prompt" />
@@ -105,9 +142,35 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="KeyWord: " />
-                        <TextBox Width="250" Text="{Binding PendingDiffPrompt.Key}" />
+
+                        <Border
+                            Margin="5,0"
+                            Padding="2,0"
+                            Background="White"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <TextBox
+                                Width="250"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Text="{Binding PendingDiffPrompt.Key}" />
+                        </Border>
+
                     </StackPanel>
-                    <TextBox Height="120" Text="{Binding PendingDiffPrompt.Prompt}" />
+
+                    <Border
+                        Margin="5,4"
+                        Padding="2,0"
+                        Background="White"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        CornerRadius="5">
+                        <TextBox
+                            Height="120"
+                            BorderThickness="0"
+                            Text="{Binding PendingDiffPrompt.Prompt}" />
+                    </Border>
                     <Button
                         Width="240"
                         Height="25"
@@ -130,7 +193,9 @@
                                 <ListBox
                                     x:Name="ImagePromptGroupList"
                                     Width="300"
-                                    Background="LightGoldenrodYellow"
+                                    Padding="4"
+                                    Background="Transparent"
+                                    BorderThickness="0"
                                     ItemsSource="{Binding PromptGroupListViewModel.Items}"
                                     SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
                                     <ListBox.ItemTemplate>
@@ -142,7 +207,10 @@
                                             </DataTemplate.Resources>
 
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Header}" />
+                                                <TextBlock
+                                                    Margin="0,4"
+                                                    FontWeight="SemiBold"
+                                                    Text="{Binding Header}" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -191,12 +259,42 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type models:DiffPrompt}">
                                 <StackPanel>
-                                    <TextBox FontSize="{StaticResource CommonFontSize}" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBox
-                                        Height="120"
-                                        DockPanel.Dock="Top"
-                                        FontSize="{StaticResource CommonFontSize}"
-                                        Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <Border
+                                        Margin="5,4"
+                                        Padding="2,0"
+                                        Background="White"
+                                        BorderBrush="Black"
+                                        BorderThickness="1"
+                                        CornerRadius="5">
+                                        <TextBox
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            FontSize="{StaticResource CommonFontSize}"
+                                            Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Border>
+
+                                    <Border
+                                        Margin="5,4"
+                                        Padding="2,0"
+                                        Background="White"
+                                        BorderBrush="Black"
+                                        BorderThickness="1"
+                                        CornerRadius="5">
+                                        <TextBox
+                                            Height="120"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            DockPanel.Dock="Top"
+                                            FontSize="{StaticResource CommonFontSize}"
+                                            Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
+                                    </Border>
+                                    <Button
+                                        Margin="0,4,0,8"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding DataContext.PromptGroupListViewModel.RemoveDiffPromptCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Delete" />
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -232,7 +330,7 @@
                             <DataTemplate DataType="{x:Type system:String}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image
-                                        Height="100"
+                                        Height="80"
                                         Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
                                         Stretch="Uniform" />
                                 </StackPanel>
@@ -247,11 +345,13 @@
                 Grid.Row="3"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
+                Margin="0,8,0,0"
+                FontWeight="SemiBold"
                 IsExpanded="False">
                 <Expander.Header>
-                    <TextBlock Margin="3" Text="Application Logs" />
+                    <TextBlock Text="Application Logs" />
                 </Expander.Header>
-                <Border BorderBrush="#DDD" BorderThickness="1">
+                <Border Background="#FAFAFA" Style="{StaticResource SectionBorderStyle}">
                     <ScrollViewer Height="120" VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding Logger.LogEntries}">
                             <ItemsControl.ItemTemplate>
@@ -261,10 +361,17 @@
                                             Width="140"
                                             Foreground="Gray"
                                             Text="{Binding Timestamp}" />
+
                                         <TextBlock
                                             Width="60"
-                                            Margin="6,0"
+                                            Margin="0,0,8,0"
+                                            Foreground="#666"
                                             Text="{Binding Level}" />
+
+                                        <TextBlock
+                                            Foreground="#333"
+                                            Text="{Binding Message}"
+                                            TextWrapping="Wrap" />
                                         <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
                                     </DockPanel>
                                 </DataTemplate>
