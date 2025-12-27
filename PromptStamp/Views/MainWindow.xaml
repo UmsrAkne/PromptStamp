@@ -271,19 +271,36 @@
                             <DataTemplate DataType="{x:Type models:DiffPrompt}">
                                 <StackPanel>
 
-                                    <Border
-                                        Margin="5,4"
-                                        Padding="2,0"
-                                        Background="White"
-                                        BorderBrush="Black"
-                                        BorderThickness="1"
-                                        CornerRadius="5">
-                                        <TextBox
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            FontSize="{StaticResource CommonFontSize}"
-                                            Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
-                                    </Border>
+                                    <DockPanel>
+                                        <CheckBox
+                                            Margin="3,0"
+                                            VerticalAlignment="Center"
+                                            DockPanel.Dock="Left"
+                                            IsChecked="{Binding IsEnabled}">
+                                            <CheckBox.LayoutTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.2" ScaleY="1.25" />
+                                                </TransformGroup>
+                                            </CheckBox.LayoutTransform>
+
+                                        </CheckBox>
+
+                                        <Border
+                                            Margin="5,4"
+                                            Padding="2,0"
+                                            Background="White"
+                                            BorderBrush="Black"
+                                            BorderThickness="1"
+                                            CornerRadius="5"
+                                            DockPanel.Dock="Right">
+
+                                            <TextBox
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                FontSize="{StaticResource CommonFontSize}"
+                                                Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
+                                        </Border>
+                                    </DockPanel>
 
                                     <Border
                                         Margin="5,4"

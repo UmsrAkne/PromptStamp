@@ -82,7 +82,7 @@ namespace PromptStamp.Models
         /// </remarks>
         public string ApplyReplacement(string basePrompt)
         {
-            foreach (var diffPrompt in DiffPrompts.Where(dp => !string.IsNullOrWhiteSpace(dp.Key.Trim())))
+            foreach (var diffPrompt in DiffPrompts.Where(dp => !string.IsNullOrWhiteSpace(dp.Key.Trim()) && dp.IsEnabled))
             {
                 Logger.Info($"Replace '{diffPrompt.Key}' -> '{diffPrompt.Prompt}'");
                 basePrompt = basePrompt.Replace(diffPrompt.Key, diffPrompt.Prompt);
