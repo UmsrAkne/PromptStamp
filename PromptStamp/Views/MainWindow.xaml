@@ -59,6 +59,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -91,7 +92,7 @@
                                             CornerRadius="5">
 
                                             <TextBox
-                                                MinHeight="80"
+                                                MaxHeight="150"
                                                 AcceptsReturn="True"
                                                 Background="Transparent"
                                                 BorderThickness="0"
@@ -129,8 +130,17 @@
                 </ContentControl.Style>
             </ContentControl>
 
-            <Expander
+            <GridSplitter
                 Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Height="4"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Background="DimGray" />
+
+            <Expander
+                Grid.Row="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="0,8,0,0"
@@ -168,6 +178,7 @@
                         CornerRadius="5">
                         <TextBox
                             Height="120"
+                            AcceptsReturn="True"
                             BorderThickness="0"
                             Text="{Binding PendingDiffPrompt.Prompt}" />
                     </Border>
@@ -180,7 +191,7 @@
                 </StackPanel>
             </Expander>
 
-            <ContentControl Grid.Row="2" Grid.Column="0">
+            <ContentControl Grid.Row="3" Grid.Column="0">
                 <i:Interaction.Behaviors>
                     <behaviors:DragDropPngToImagePromptGroupsBehavior />
                 </i:Interaction.Behaviors>
@@ -248,7 +259,7 @@
                 </ContentControl.Style>
             </ContentControl>
 
-            <Grid Grid.Row="2" Grid.Column="1">
+            <Grid Grid.Row="3" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="120" />
@@ -283,6 +294,7 @@
                                         CornerRadius="5">
                                         <TextBox
                                             Height="120"
+                                            AcceptsReturn="True"
                                             Background="Transparent"
                                             BorderThickness="0"
                                             DockPanel.Dock="Top"
@@ -332,7 +344,15 @@
                                     <Image
                                         Height="80"
                                         Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
-                                        Stretch="Uniform" />
+                                        Stretch="Uniform"
+                                        ToolTipService.InitialShowDelay="100">
+                                        <Image.ToolTip>
+                                            <Image
+                                                Width="300"
+                                                Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                                Stretch="Uniform" />
+                                        </Image.ToolTip>
+                                    </Image>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -342,7 +362,7 @@
             </Grid>
 
             <Expander
-                Grid.Row="3"
+                Grid.Row="4"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="0,8,0,0"
