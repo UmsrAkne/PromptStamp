@@ -29,11 +29,7 @@ namespace PromptStamp.Models
 
             var prompt = basePrompt;
 
-            foreach (var diffPrompt in DiffPrompts.Where(dp => !string.IsNullOrWhiteSpace(dp.Key.Trim())))
-            {
-                Logger.Info($"Replace '{diffPrompt.Key}' -> '{diffPrompt.Prompt}'");
-                prompt = prompt.Replace(diffPrompt.Key, diffPrompt.Prompt);
-            }
+            prompt = ApplyReplacement(prompt);
 
             foreach (var path in ImagePaths)
             {
@@ -74,6 +70,25 @@ namespace PromptStamp.Models
 
             DiffPrompts.Add(prompt);
             return true;
+        }
+
+        /// <summary>
+        /// DiffPrompts に定義されたキーとプロンプトで、与えられたベースプロンプトの文字列置換を行います。
+        /// </summary>
+        /// <param name="basePrompt">置換の基準となる元のプロンプト文字列。</param>
+        /// <returns>全ての有効な DiffPrompt の置換を適用した後のプロンプト文字列。</returns>
+        /// <remarks>
+        /// キーは大文字・小文字を区別して一致した部分を単純に Replace します。空白のみのキーは無視されます。
+        /// </remarks>
+        public string ApplyReplacement(string basePrompt)
+        {
+            foreach (var diffPrompt in DiffPrompts.Where(dp => !string.IsNullOrWhiteSpace(dp.Key.Trim())))
+            {
+                Logger.Info($"Replace '{diffPrompt.Key}' -> '{diffPrompt.Prompt}'");
+                basePrompt = basePrompt.Replace(diffPrompt.Key, diffPrompt.Prompt);
+            }
+
+            return basePrompt;
         }
     }
 }

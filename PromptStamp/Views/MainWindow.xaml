@@ -320,6 +320,15 @@
                         Height="25"
                         Margin="3"
                         HorizontalAlignment="Right"
+                        Command="{Binding CopyResolvedPromptCommand}"
+                        CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
+                        Content="Copy Merged Prompt" />
+
+                    <Button
+                        Width="200"
+                        Height="25"
+                        Margin="3"
+                        HorizontalAlignment="Right"
                         Command="{Binding AddDiffPromptCommand}"
                         CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
                         Content="Add Item" />

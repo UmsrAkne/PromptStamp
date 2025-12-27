@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using PromptStamp.Factories;
@@ -72,6 +73,18 @@ public class MainWindowViewModel : BindableBase
         }
 
         param.DiffPrompts.Add(new DiffPrompt());
+    });
+
+    public DelegateCommand<ImagePromptGroup> CopyResolvedPromptCommand => new ((group) =>
+    {
+        if (group == null)
+        {
+            Logger.Warn("CopyResolvedPromptCommand: group parameter was null. Operation aborted.");
+            return;
+        }
+
+        Clipboard.SetText(group.ApplyReplacement(CommonPrompt));
+        Logger.Info("Resolved prompt copied to clipboard.");
     });
 
     public IAppLogger Logger { get; }
