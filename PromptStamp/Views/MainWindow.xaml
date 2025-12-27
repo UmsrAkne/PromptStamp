@@ -178,6 +178,7 @@
                         CornerRadius="5">
                         <TextBox
                             Height="120"
+                            AcceptsReturn="True"
                             BorderThickness="0"
                             Text="{Binding PendingDiffPrompt.Prompt}" />
                     </Border>
@@ -293,6 +294,7 @@
                                         CornerRadius="5">
                                         <TextBox
                                             Height="120"
+                                            AcceptsReturn="True"
                                             Background="Transparent"
                                             BorderThickness="0"
                                             DockPanel.Dock="Top"
