@@ -1,8 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Prism.Commands;
 using Prism.Mvvm;
+using PromptStamp.Factories;
 using PromptStamp.Models;
 using PromptStamp.Utils.Log;
+using PromptStamp.Utils.Yaml;
 
 namespace PromptStamp.ViewModels
 {
@@ -43,5 +47,57 @@ namespace PromptStamp.ViewModels
                 SelectedItem.DiffPrompts.Remove(prompt);
             }
         });
+
+        public static void ApplyToViewModel(AppStateYaml dto, MainWindowViewModel vm)
+        {
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto));
+            }
+
+            if (vm == null)
+            {
+                throw new ArgumentNullException(nameof(vm));
+            }
+
+            vm.CommonPrompt = dto.CommonPrompt ?? string.Empty;
+
+            var list = vm.PromptGroupListViewModel;
+            list.Items.Clear();
+
+            foreach (var g in dto.Groups ?? Enumerable.Empty<ImagePromptGroupYaml>())
+            {
+                list.Items.Add(MapGroupToVm(g));
+            }
+        }
+
+        private static ImagePromptGroup MapGroupToVm(ImagePromptGroupYaml g)
+        {
+            var group = ImagePromptGroupFactory.Create();
+            group.Header = g.Header;
+
+            if (g.ImagePaths != null)
+            {
+                foreach (var path in g.ImagePaths)
+                {
+                    group.ImagePaths.Add(path);
+                }
+            }
+
+            if (g.DiffPrompts != null)
+            {
+                foreach (var d in g.DiffPrompts)
+                {
+                    group.DiffPrompts.Add(new DiffPrompt
+                    {
+                        Key = d.Key,
+                        Prompt = d.Prompt,
+                        IsEnabled = d.IsEnabled,
+                    });
+                }
+            }
+
+            return group;
+        }
     }
 }
