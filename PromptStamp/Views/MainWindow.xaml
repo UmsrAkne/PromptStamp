@@ -25,6 +25,11 @@
             Key="S"
             Command="{Binding ApplyDiffAllCommand}"
             Modifiers="Control+Shift" />
+
+        <KeyBinding
+            Key="Y"
+            Command="{Binding OpenAppStateWithYamlCommand}"
+            Modifiers="Control+Shift" />
     </Window.InputBindings>
 
     <Window.Resources>

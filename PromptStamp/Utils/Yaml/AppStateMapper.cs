@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PromptStamp.Factories;
 using PromptStamp.Models;
 using PromptStamp.ViewModels;
 
@@ -31,6 +32,29 @@ namespace PromptStamp.Utils.Yaml
             };
         }
 
+        public static void ApplyToViewModel(AppStateYaml dto, MainWindowViewModel vm)
+        {
+            if (dto == null)
+            {
+                throw new ArgumentNullException(nameof(dto));
+            }
+
+            if (vm == null)
+            {
+                throw new ArgumentNullException(nameof(vm));
+            }
+
+            vm.CommonPrompt = dto.CommonPrompt ?? string.Empty;
+
+            var list = vm.PromptGroupListViewModel;
+            list.Items.Clear();
+
+            foreach (var g in dto.Groups ?? Enumerable.Empty<ImagePromptGroupYaml>())
+            {
+                list.Items.Add(MapGroupToVm(g));
+            }
+        }
+
         private static ImagePromptGroupYaml MapGroup(ImagePromptGroup g)
         {
             if (g == null)
@@ -59,6 +83,35 @@ namespace PromptStamp.Utils.Yaml
                 Prompt = d.Prompt,
                 IsEnabled = d.IsEnabled,
             };
+        }
+
+        private static ImagePromptGroup MapGroupToVm(ImagePromptGroupYaml g)
+        {
+            var group = ImagePromptGroupFactory.Create();
+            group.Header = g.Header;
+
+            if (g.ImagePaths != null)
+            {
+                foreach (var path in g.ImagePaths)
+                {
+                    group.ImagePaths.Add(path);
+                }
+            }
+
+            if (g.DiffPrompts != null)
+            {
+                foreach (var d in g.DiffPrompts)
+                {
+                    group.DiffPrompts.Add(new DiffPrompt
+                    {
+                        Key = d.Key,
+                        Prompt = d.Prompt,
+                        IsEnabled = d.IsEnabled,
+                    });
+                }
+            }
+
+            return group;
         }
     }
 }
