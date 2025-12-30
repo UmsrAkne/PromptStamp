@@ -267,7 +267,7 @@
             <Grid Grid.Row="3" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition Height="120" />
+                    <RowDefinition Height="140" />
                 </Grid.RowDefinitions>
 
                 <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible">
@@ -337,25 +337,28 @@
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="1">
-                    <Button
-                        Width="200"
-                        Height="25"
-                        Margin="3"
-                        HorizontalAlignment="Right"
-                        Command="{Binding CopyResolvedPromptCommand}"
-                        CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
-                        Content="Copy Merged Prompt" />
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button
+                            Width="200"
+                            Height="25"
+                            Margin="3"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CopyResolvedPromptCommand}"
+                            CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
+                            Content="Copy Merged Prompt" />
 
-                    <Button
-                        Width="200"
-                        Height="25"
-                        Margin="3"
-                        HorizontalAlignment="Right"
-                        Command="{Binding AddDiffPromptCommand}"
-                        CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
-                        Content="Add Item" />
+                        <Button
+                            Width="200"
+                            Height="25"
+                            Margin="3"
+                            HorizontalAlignment="Right"
+                            Command="{Binding AddDiffPromptCommand}"
+                            CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
+                            Content="Add Item" />
+                    </StackPanel>
 
                     <ListBox
+                        Height="100"
                         Background="LightCyan"
                         DockPanel.Dock="Bottom"
                         ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}">
@@ -373,7 +376,7 @@
                             <DataTemplate DataType="{x:Type system:String}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image
-                                        Height="80"
+                                        Height="90"
                                         Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
                                         Stretch="Uniform"
                                         ToolTipService.InitialShowDelay="100">
