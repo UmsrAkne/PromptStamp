@@ -1,4 +1,6 @@
-﻿namespace PromptStamp.Core.SpellCheck
+﻿using System.Text.RegularExpressions;
+
+namespace PromptStamp.Core.SpellCheck
 {
     public class WordNormalizer
     {
@@ -17,6 +19,9 @@
 
             t = t.Trim();
 
+            // 先頭に数字がつく場合は削除
+            t = RemovePrefixNumerics(t);
+
             // アルファベットが含まれない場合は無視
             if (!ContainsAlphabet(t))
             {
@@ -24,6 +29,17 @@
             }
 
             return t;
+        }
+
+        private static string RemovePrefixNumerics(string s)
+        {
+            var regex = new Regex("^[0-9]+");
+            while (regex.IsMatch(s) && s.Length > 0)
+            {
+                s = s.Substring(1);
+            }
+
+            return s;
         }
 
         private static string RemoveParentheses(string s)
@@ -35,7 +51,7 @@
 
             // 例: "(short hair:0.8)" → "short hair:0.8"
             // カッコをお含む場合は、必然的に文字数が２文字以上になるため、それを条件に含める。
-            while (s.Length >= 2 || (s.StartsWith("(") && s.EndsWith(")")))
+            while (s.Length >= 2 && s.StartsWith("(") && s.EndsWith(")"))
             {
                 s = s.Substring(1, s.Length - 2);
             }
