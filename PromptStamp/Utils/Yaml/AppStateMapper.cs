@@ -1,52 +1,36 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
-using Prism.Commands;
-using Prism.Mvvm;
 using PromptStamp.Factories;
 using PromptStamp.Models;
-using PromptStamp.Utils.Log;
-using PromptStamp.Utils.Yaml;
+using PromptStamp.ViewModels;
 
-namespace PromptStamp.ViewModels
+namespace PromptStamp.Utils.Yaml
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PromptGroupListViewModel : BindableBase
+    public static class AppStateMapper
     {
-        private readonly IAppLogger logger;
-        private ObservableCollection<ImagePromptGroup> items = new ();
-        private ImagePromptGroup selectedItem;
-
-        public PromptGroupListViewModel(IAppLogger logger)
+        public static AppStateYaml ToDto(MainWindowViewModel vm)
         {
-            this.logger = logger;
-        }
-
-        public ObservableCollection<ImagePromptGroup> Items
-        {
-            get => items;
-            set => SetProperty(ref items, value);
-        }
-
-        public ImagePromptGroup SelectedItem
-        {
-            get => selectedItem;
-            set => SetProperty(ref selectedItem, value);
-        }
-
-        public DelegateCommand<DiffPrompt> RemoveDiffPromptCommand => new(prompt =>
-        {
-            if (prompt == null)
+            if (vm == null)
             {
-                logger.Warn("RemoveDiffPromptCommand に null が渡されました。");
-                return;
+                throw new ArgumentNullException(nameof(vm));
             }
 
-            if (SelectedItem.DiffPrompts.Contains(prompt))
+            if (vm.PromptGroupListViewModel == null)
             {
-                SelectedItem.DiffPrompts.Remove(prompt);
+                throw new InvalidOperationException("PromptGroupListViewModel が null です。初期化漏れの可能性があります。");
             }
-        });
+
+            var groups = vm.PromptGroupListViewModel.Items
+                .Select(MapGroup)
+                .ToList();
+
+            return new AppStateYaml
+            {
+                CommonPrompt = vm.CommonPrompt,
+                Groups = groups,
+            };
+        }
 
         public static void ApplyToViewModel(AppStateYaml dto, MainWindowViewModel vm)
         {
@@ -69,6 +53,36 @@ namespace PromptStamp.ViewModels
             {
                 list.Items.Add(MapGroupToVm(g));
             }
+        }
+
+        private static ImagePromptGroupYaml MapGroup(ImagePromptGroup g)
+        {
+            if (g == null)
+            {
+                throw new ArgumentNullException(nameof(g));
+            }
+
+            return new ImagePromptGroupYaml
+            {
+                Header = g.Header,
+                ImagePaths = g.ImagePaths?.ToList() ?? new List<string>(),
+                DiffPrompts = g.DiffPrompts?.Select(MapDiff).ToList() ?? new List<DiffPromptYaml>(),
+            };
+        }
+
+        private static DiffPromptYaml MapDiff(DiffPrompt d)
+        {
+            if (d == null)
+            {
+                throw new ArgumentNullException(nameof(d));
+            }
+
+            return new DiffPromptYaml
+            {
+                Key = d.Key,
+                Prompt = d.Prompt,
+                IsEnabled = d.IsEnabled,
+            };
         }
 
         private static ImagePromptGroup MapGroupToVm(ImagePromptGroupYaml g)

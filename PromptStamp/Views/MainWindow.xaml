@@ -25,6 +25,11 @@
             Key="S"
             Command="{Binding ApplyDiffAllCommand}"
             Modifiers="Control+Shift" />
+
+        <KeyBinding
+            Key="Y"
+            Command="{Binding OpenAppStateWithYamlCommand}"
+            Modifiers="Control+Shift" />
     </Window.InputBindings>
 
     <Window.Resources>
@@ -262,7 +267,7 @@
             <Grid Grid.Row="3" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition Height="120" />
+                    <RowDefinition Height="140" />
                 </Grid.RowDefinitions>
 
                 <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible">
@@ -271,19 +276,36 @@
                             <DataTemplate DataType="{x:Type models:DiffPrompt}">
                                 <StackPanel>
 
-                                    <Border
-                                        Margin="5,4"
-                                        Padding="2,0"
-                                        Background="White"
-                                        BorderBrush="Black"
-                                        BorderThickness="1"
-                                        CornerRadius="5">
-                                        <TextBox
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            FontSize="{StaticResource CommonFontSize}"
-                                            Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
-                                    </Border>
+                                    <DockPanel>
+                                        <CheckBox
+                                            Margin="3,0"
+                                            VerticalAlignment="Center"
+                                            DockPanel.Dock="Left"
+                                            IsChecked="{Binding IsEnabled}">
+                                            <CheckBox.LayoutTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0" CenterY="0" ScaleX="1.2" ScaleY="1.25" />
+                                                </TransformGroup>
+                                            </CheckBox.LayoutTransform>
+
+                                        </CheckBox>
+
+                                        <Border
+                                            Margin="5,4"
+                                            Padding="2,0"
+                                            Background="White"
+                                            BorderBrush="Black"
+                                            BorderThickness="1"
+                                            CornerRadius="5"
+                                            DockPanel.Dock="Right">
+
+                                            <TextBox
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                FontSize="{StaticResource CommonFontSize}"
+                                                Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" />
+                                        </Border>
+                                    </DockPanel>
 
                                     <Border
                                         Margin="5,4"
@@ -315,16 +337,28 @@
                 </ScrollViewer>
 
                 <StackPanel Grid.Row="1">
-                    <Button
-                        Width="200"
-                        Height="25"
-                        Margin="3"
-                        HorizontalAlignment="Right"
-                        Command="{Binding AddDiffPromptCommand}"
-                        CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
-                        Content="Add Item" />
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button
+                            Width="200"
+                            Height="25"
+                            Margin="3"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CopyResolvedPromptCommand}"
+                            CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
+                            Content="Copy Merged Prompt" />
+
+                        <Button
+                            Width="200"
+                            Height="25"
+                            Margin="3"
+                            HorizontalAlignment="Right"
+                            Command="{Binding AddDiffPromptCommand}"
+                            CommandParameter="{Binding PromptGroupListViewModel.SelectedItem}"
+                            Content="Add Item" />
+                    </StackPanel>
 
                     <ListBox
+                        Height="100"
                         Background="LightCyan"
                         DockPanel.Dock="Bottom"
                         ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}">
@@ -342,7 +376,7 @@
                             <DataTemplate DataType="{x:Type system:String}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image
-                                        Height="80"
+                                        Height="90"
                                         Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
                                         Stretch="Uniform"
                                         ToolTipService.InitialShowDelay="100">

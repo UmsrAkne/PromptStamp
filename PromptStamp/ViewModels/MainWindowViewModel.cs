@@ -3,12 +3,18 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using CommunityToolkit.Mvvm.Input;
 using Prism.Commands;
 using Prism.Mvvm;
 using PromptStamp.Factories;
 using PromptStamp.Models;
 using PromptStamp.Utils;
 using PromptStamp.Utils.Log;
+using PromptStamp.Utils.Yaml;
+using YamlDotNet.Serialization;
 
 namespace PromptStamp.ViewModels;
 
@@ -72,6 +78,89 @@ public class MainWindowViewModel : BindableBase
         }
 
         param.DiffPrompts.Add(new DiffPrompt());
+    });
+
+    public DelegateCommand<ImagePromptGroup> CopyResolvedPromptCommand => new ((group) =>
+    {
+        if (group == null)
+        {
+            Logger.Warn("CopyResolvedPromptCommand: group parameter was null. Operation aborted.");
+            return;
+        }
+
+        Clipboard.SetText(group.ApplyReplacement(CommonPrompt));
+        Logger.Info("Resolved prompt copied to clipboard.");
+    });
+
+    public AsyncRelayCommand OpenAppStateWithYamlCommand => new (async () =>
+    {
+        try
+        {
+            // 1. local_data ディレクトリ作成
+            var exeDir = AppDomain.CurrentDomain.BaseDirectory;
+            var localDataDir = Path.Combine(exeDir, "local_data");
+            Directory.CreateDirectory(localDataDir);
+
+            // 2. VM → DTO 変換
+            var dto = AppStateMapper.ToDto(this);
+
+            // 3. YAML 作成
+            var serializer = new YamlAppStateSerializer();
+            var yaml = serializer.Serialize(dto);
+
+            // 4. 保存ファイルパス（ユニーク名）
+            var filePath = Path.Combine(localDataDir, $"app_state_{DateTime.Now:yyyyMMdd_HHmmss}.yaml");
+
+            await File.WriteAllTextAsync(filePath, yaml, Encoding.UTF8);
+
+            // 5. OS の既定エディタで開く
+            var psi = new ProcessStartInfo
+            {
+                FileName = filePath,
+                UseShellExecute = true,
+            };
+
+            var process = Process.Start(psi);
+
+            if (process != null)
+            {
+                // 6. エディタが閉じるまで待つ
+                await Task.Run(() => process.WaitForExit());
+            }
+            else
+            {
+                Logger.Warn("外部エディタを起動できませんでした。");
+                return;
+            }
+
+            // 7. YAML 再読み込み（例外をキャッチしたら反映しない）
+            AppStateYaml reloadedDto;
+            try
+            {
+                var text = await File.ReadAllTextAsync(filePath, Encoding.UTF8);
+                var deserializer = new DeserializerBuilder().Build();
+                reloadedDto = deserializer.Deserialize<AppStateYaml>(text);
+            }
+            catch (Exception ex)
+            {
+                Logger?.Error("YAML の読み込みで例外が発生したため、反映を中止します。", ex);
+                return;
+            }
+
+            // 8. DTO → ViewModel 適用
+            try
+            {
+                AppStateMapper.ApplyToViewModel(reloadedDto, this);
+            }
+            catch (Exception ex)
+            {
+                Logger?.Error("AppState の適用で例外が発生しました。反映は行われません。", ex);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger?.Error("AppStateWithYamlCommand の処理中に例外が発生しました。", ex);
+        }
     });
 
     public IAppLogger Logger { get; }
