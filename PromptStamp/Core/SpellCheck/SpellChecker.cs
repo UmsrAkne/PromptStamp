@@ -1,28 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using NHunspell;
 
 namespace PromptStamp.Core.SpellCheck
 {
-    public class SpellChecker
+    public class SpellChecker : IDisposable
     {
-        private readonly HashSet<string> dictionary;
+        private readonly Hunspell hunspell;
 
-        public SpellChecker(IEnumerable<string> words)
+        public SpellChecker(string affPath, string dicPath)
         {
-            dictionary = new HashSet<string>(
-                words.Select(w => w.ToLowerInvariant()));
+            hunspell = new Hunspell(affPath, dicPath);
         }
 
         public SpellCheckResult Check(string word)
         {
-            var key = word.ToLowerInvariant();
-            var ok = dictionary.Contains(key);
+            var isCorrect = hunspell.Spell(word);
+
+            var suggestions = isCorrect
+                ? Array.Empty<string>()
+                : hunspell.Suggest(word).ToArray();
 
             return new SpellCheckResult(
                 word,
-                ok,
-                Array.Empty<string>());
+                isCorrect,
+                suggestions);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            hunspell.Dispose();
         }
     }
 }

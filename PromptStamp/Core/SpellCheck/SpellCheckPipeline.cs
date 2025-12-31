@@ -1,11 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using PromptStamp.Utils.Log;
 
 namespace PromptStamp.Core.SpellCheck
 {
-    public class SpellCheckPipeline
+    public class SpellCheckPipeline : IDisposable
     {
-        private readonly WordNormalizer normalizer = new WordNormalizer();
-        private readonly SpellChecker spellChecker = new SpellChecker(new List<string>());
+        private readonly WordNormalizer normalizer = new ();
+        private readonly SpellChecker spellChecker = new (
+            "Dictionaries/en_US.aff",
+            "Dictionaries/en_US.dic");
+
+        private readonly IAppLogger logger;
+
+        public SpellCheckPipeline(IAppLogger logger)
+        {
+            this.logger = logger;
+        }
 
         public void Check(string text)
         {
@@ -21,9 +31,25 @@ namespace PromptStamp.Core.SpellCheck
 
                 if (!result.IsCorrect)
                 {
-                    // ログ / UI / マーカー表示
+                    ReportMissSpell(result);
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            spellChecker.Dispose();
+        }
+
+        private void ReportMissSpell(SpellCheckResult result)
+        {
+            logger.Warn($"[SpellCheck] {result.Word}");
         }
     }
 }
