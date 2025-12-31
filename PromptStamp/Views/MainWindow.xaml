@@ -227,7 +227,11 @@
                                                 </Style>
                                             </DataTemplate.Resources>
 
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Height="50" Orientation="Horizontal">
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:AddImageToGroupBehavior />
+                                                </i:Interaction.Behaviors>
+
                                                 <TextBlock
                                                     Margin="0,4"
                                                     FontWeight="SemiBold"
