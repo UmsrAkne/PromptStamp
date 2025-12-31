@@ -30,6 +30,11 @@
             Key="Y"
             Command="{Binding OpenAppStateWithYamlCommand}"
             Modifiers="Control+Shift" />
+
+        <KeyBinding
+            Key="C"
+            Command="{Binding SpellCheckCommand}"
+            Modifiers="Control+Shift+Alt" />
     </Window.InputBindings>
 
     <Window.Resources>
@@ -222,7 +227,11 @@
                                                 </Style>
                                             </DataTemplate.Resources>
 
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Height="50" Orientation="Horizontal">
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:AddImageToGroupBehavior />
+                                                </i:Interaction.Behaviors>
+
                                                 <TextBlock
                                                     Margin="0,4"
                                                     FontWeight="SemiBold"
@@ -382,7 +391,8 @@
                                         ToolTipService.InitialShowDelay="100">
                                         <Image.ToolTip>
                                             <Image
-                                                Width="300"
+                                                MaxWidth="600"
+                                                MaxHeight="600"
                                                 Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
                                                 Stretch="Uniform" />
                                         </Image.ToolTip>

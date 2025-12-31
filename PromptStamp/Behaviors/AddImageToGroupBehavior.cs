@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
-using PromptStamp.Factories;
 using PromptStamp.Models;
-using PromptStamp.ViewModels;
 
 namespace PromptStamp.Behaviors
 {
-    public class DragDropPngToImagePromptGroupsBehavior : Behavior<ContentControl>
+    /// <summary>
+    /// ListBoxItem に対する PNG ドロップを受け付け、
+    /// 既存 ImagePromptGroup に画像を追加する Behavior。
+    /// </summary>
+    public class AddImageToGroupBehavior : Behavior<StackPanel>
     {
         protected override void OnAttached()
         {
             base.OnAttached();
+
             if (AssociatedObject == null)
             {
                 return;
@@ -38,20 +39,6 @@ namespace PromptStamp.Behaviors
             base.OnDetaching();
         }
 
-        private void OnPreviewDragOver(object sender, DragEventArgs e)
-        {
-            if (HasPngFiles(e))
-            {
-                e.Effects = DragDropEffects.Copy;
-                e.Handled = true;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-                e.Handled = true;
-            }
-        }
-
         private static bool HasPngFiles(DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -64,7 +51,7 @@ namespace PromptStamp.Behaviors
                 return false;
             }
 
-            return files.Any(f => IsPng(f));
+            return files.Any(IsPng);
         }
 
         private static bool IsPng(string path)
@@ -76,6 +63,20 @@ namespace PromptStamp.Behaviors
             catch
             {
                 return false;
+            }
+        }
+
+        private void OnPreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (HasPngFiles(e))
+            {
+                e.Effects = DragDropEffects.Copy;
+                e.Handled = true;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
             }
         }
 
@@ -97,20 +98,23 @@ namespace PromptStamp.Behaviors
                 return;
             }
 
-            var groups = new List<ImagePromptGroup>();
+            // ListBoxItem の DataContext が ImagePromptGroup
+            if (AssociatedObject.DataContext is not ImagePromptGroup group)
+            {
+                return;
+            }
+
+            // 既存グループへ画像を追加
             foreach (var file in pngFiles)
             {
-                var ig = ImagePromptGroupFactory.Create();
-                ig.Header = Path.GetFileNameWithoutExtension(file);
-                ig.ImagePaths = new ObservableCollection<string> { file, };
-
-                groups.Add(ig);
+                if (!group.ImagePaths.Contains(file))
+                {
+                    group.ImagePaths.Add(file);
+                }
             }
 
-            if (AssociatedObject?.DataContext is MainWindowViewModel vm)
-            {
-                vm.PromptGroupListViewModel.Items.AddRange(groups);
-            }
+            // アイテムへのドロップが外側の Behavior に伝わるのを遮断
+            e.Handled = true;
         }
     }
 }

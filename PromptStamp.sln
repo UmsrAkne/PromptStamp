@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromptStamp", "PromptStamp\PromptStamp.csproj", "{045AC85C-5866-48CB-A353-A7569A1A74E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromptStamp.Tests", "PromptStamp.Tests\PromptStamp.Tests.csproj", "{400E9DA2-2ADA-48C6-A735-E9742F010A0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{045AC85C-5866-48CB-A353-A7569A1A74E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{045AC85C-5866-48CB-A353-A7569A1A74E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{045AC85C-5866-48CB-A353-A7569A1A74E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{400E9DA2-2ADA-48C6-A735-E9742F010A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{400E9DA2-2ADA-48C6-A735-E9742F010A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{400E9DA2-2ADA-48C6-A735-E9742F010A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{400E9DA2-2ADA-48C6-A735-E9742F010A0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
