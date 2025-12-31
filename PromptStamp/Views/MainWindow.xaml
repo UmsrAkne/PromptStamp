@@ -387,7 +387,8 @@
                                         ToolTipService.InitialShowDelay="100">
                                         <Image.ToolTip>
                                             <Image
-                                                Width="300"
+                                                MaxWidth="600"
+                                                MaxHeight="600"
                                                 Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
                                                 Stretch="Uniform" />
                                         </Image.ToolTip>
