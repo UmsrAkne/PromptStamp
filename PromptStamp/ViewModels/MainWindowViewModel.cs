@@ -9,6 +9,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using Prism.Commands;
 using Prism.Mvvm;
+using PromptStamp.Core.SpellCheck;
 using PromptStamp.Factories;
 using PromptStamp.Models;
 using PromptStamp.Utils;
@@ -22,6 +23,7 @@ namespace PromptStamp.ViewModels;
 public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new ();
+    private readonly SpellCheckPipeline spellCheckPipeline;
 
     private string commonPrompt = string.Empty;
     private DiffPrompt pendingDiffPrompt = new ();
@@ -36,6 +38,7 @@ public class MainWindowViewModel : BindableBase
         Logger = logger;
         Logger.Info("MainViewModel initialized");
         PromptGroupListViewModel = new PromptGroupListViewModel(Logger);
+        spellCheckPipeline = new SpellCheckPipeline(Logger);
         SetDummies();
     }
 
@@ -164,6 +167,11 @@ public class MainWindowViewModel : BindableBase
     });
 
     public IAppLogger Logger { get; }
+
+    public DelegateCommand SpellCheckCommand => new DelegateCommand(() =>
+    {
+        spellCheckPipeline.Check(CommonPrompt);
+    });
 
     [Conditional("DEBUG")]
     private void SetDummies()

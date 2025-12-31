@@ -30,6 +30,11 @@
             Key="Y"
             Command="{Binding OpenAppStateWithYamlCommand}"
             Modifiers="Control+Shift" />
+
+        <KeyBinding
+            Key="C"
+            Command="{Binding SpellCheckCommand}"
+            Modifiers="Control+Shift+Alt" />
     </Window.InputBindings>
 
     <Window.Resources>
