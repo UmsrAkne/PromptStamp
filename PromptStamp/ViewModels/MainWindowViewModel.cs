@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -170,7 +171,29 @@ public class MainWindowViewModel : BindableBase
 
     public DelegateCommand SpellCheckCommand => new DelegateCommand(() =>
     {
-        spellCheckPipeline.Check(CommonPrompt);
+        List<(string parentGroupName, string prompt)> prompts = new ()
+        {
+            ("Common Prompt", CommonPrompt),
+        };
+
+        foreach (var group in PromptGroupListViewModel.Items)
+        {
+            foreach (var groupDiffPrompt in group.DiffPrompts)
+            {
+                 prompts.Add((group.Header, groupDiffPrompt.Prompt));
+            }
+        }
+
+        var issueCount = 0;
+        foreach (var valueTuple in prompts)
+        {
+            spellCheckPipeline.Check(valueTuple.prompt, valueTuple.parentGroupName);
+            issueCount += spellCheckPipeline.LastIssueCount;
+        }
+
+        Logger.Info(issueCount == 0
+            ? "SpellCheck: no spelling issues detected."
+            : $"SpellCheck: {issueCount} issues found.");
     });
 
     [Conditional("DEBUG")]

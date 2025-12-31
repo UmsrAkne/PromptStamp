@@ -16,8 +16,12 @@ namespace PromptStamp.Core.SpellCheck
             this.logger = logger;
         }
 
-        public void Check(string text)
+        public int LastIssueCount { get; private set; }
+
+        public void Check(string text, string location)
         {
+            LastIssueCount = 0;
+
             foreach (var token in TextTokenizer.Tokenize(text))
             {
                 var word = normalizer.Normalize(token);
@@ -30,14 +34,15 @@ namespace PromptStamp.Core.SpellCheck
 
                 if (!result.IsCorrect)
                 {
-                    ReportMissSpell(result);
+                    LastIssueCount++;
+                    ReportMissSpell(result, location);
                 }
             }
         }
 
-        private void ReportMissSpell(SpellCheckResult result)
+        private void ReportMissSpell(SpellCheckResult result, string location)
         {
-            logger.Warn($"[SpellCheck] {result.Word}");
+            logger.Warn($"[SpellCheck] {location}: {result.Word}");
         }
     }
 }
