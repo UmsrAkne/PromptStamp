@@ -6,7 +6,7 @@ namespace PromptStamp.Core.SpellCheck
     {
         public string Normalize(string token)
         {
-            if (string.IsNullOrWhiteSpace(token))
+            if (string.IsNullOrWhiteSpace(token) || IsAngleBracketToken(token))
             {
                 return string.Empty;
             }
@@ -29,6 +29,12 @@ namespace PromptStamp.Core.SpellCheck
             }
 
             return t;
+        }
+
+        private static bool IsAngleBracketToken(string s)
+        {
+            // <xxx> の形式のみ対象
+            return s.Length >= 2 && s.StartsWith("<") && s.EndsWith(">");
         }
 
         private static string RemovePrefixNumerics(string s)

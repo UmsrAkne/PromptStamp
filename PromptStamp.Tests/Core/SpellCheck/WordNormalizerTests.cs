@@ -68,4 +68,12 @@ public class WordNormalizerTests
         // After removing the numeric weight using the last colon, the remaining part may still contain a colon
         Assert.That(normalizer.Normalize("face:smile:0.5"), Is.EqualTo("face:smile"));
     }
+
+    [Test]
+    public void Normalize_AngleBracket_ReturnsEmpty()
+    {
+        Assert.That(normalizer.Normalize("<lora:1.0>"), Is.EqualTo(string.Empty));
+        Assert.That(normalizer.Normalize("<loral>"), Is.EqualTo(string.Empty));
+        Assert.That(normalizer.Normalize("<>"), Is.EqualTo(string.Empty));
+    }
 }
