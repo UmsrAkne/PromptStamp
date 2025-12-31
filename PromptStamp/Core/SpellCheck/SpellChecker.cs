@@ -1,40 +1,31 @@
 ﻿using System;
-using NHunspell;
+using System.Linq;
+using WeCantSpell.Hunspell;
 
 namespace PromptStamp.Core.SpellCheck
 {
-    public class SpellChecker : IDisposable
+    public class SpellChecker
     {
-        private readonly Hunspell hunspell;
+        private readonly WordList wordList;
 
         public SpellChecker(string affPath, string dicPath)
         {
-            hunspell = new Hunspell(affPath, dicPath);
+            // 静的メソッド CreateFromFiles で読み込み。
+            wordList = WordList.CreateFromFiles(dicPath, affPath);
         }
 
         public SpellCheckResult Check(string word)
         {
-            var isCorrect = hunspell.Spell(word);
+            var isCorrect = wordList.Check(word);
 
             var suggestions = isCorrect
                 ? Array.Empty<string>()
-                : hunspell.Suggest(word).ToArray();
+                : wordList.Suggest(word).ToArray();
 
             return new SpellCheckResult(
                 word,
                 isCorrect,
                 suggestions);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            hunspell.Dispose();
         }
     }
 }

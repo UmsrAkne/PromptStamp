@@ -9,13 +9,13 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="NHunspell" Version="1.2.5554.16953" />
         <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="WeCantSpell.Hunspell" Version="7.0.1" />
         <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>
 </Project>

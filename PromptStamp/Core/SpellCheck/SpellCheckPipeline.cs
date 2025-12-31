@@ -1,9 +1,8 @@
-﻿using System;
-using PromptStamp.Utils.Log;
+﻿using PromptStamp.Utils.Log;
 
 namespace PromptStamp.Core.SpellCheck
 {
-    public class SpellCheckPipeline : IDisposable
+    public class SpellCheckPipeline
     {
         private readonly WordNormalizer normalizer = new ();
         private readonly SpellChecker spellChecker = new (
@@ -34,17 +33,6 @@ namespace PromptStamp.Core.SpellCheck
                     ReportMissSpell(result);
                 }
             }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            spellChecker.Dispose();
         }
 
         private void ReportMissSpell(SpellCheckResult result)
