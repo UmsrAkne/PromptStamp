@@ -22,6 +22,9 @@ namespace PromptStamp.Core.SpellCheck
             // 先頭に数字がつく場合は削除
             t = RemovePrefixNumerics(t);
 
+            // prompt: のようなフォーマットのトークンのコロンの処理
+            t = RemovePromptLabels(t);
+
             // アルファベットが含まれない場合は無視
             if (!ContainsAlphabet(t))
             {
@@ -93,6 +96,17 @@ namespace PromptStamp.Core.SpellCheck
             }
 
             return false;
+        }
+
+        private static string RemovePromptLabels(string s)
+        {
+            // Negative prompt: のような「名前 + コロン」で終わる部分からコロンを取り除く
+            if (s.EndsWith(":"))
+            {
+                s = s.Replace(":", string.Empty);
+            }
+
+            return s;
         }
     }
 }

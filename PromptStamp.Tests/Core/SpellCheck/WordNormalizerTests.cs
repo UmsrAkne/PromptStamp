@@ -43,6 +43,13 @@ public class WordNormalizerTests
     }
 
     [Test]
+    public void Normalize_RemovesLabel()
+    {
+        Assert.That(normalizer.Normalize("prompt:"), Is.EqualTo("prompt"));
+    }
+
+
+    [Test]
     public void Normalize_RemovesNumericPrefix()
     {
         Assert.That(normalizer.Normalize("1girl"), Is.EqualTo("girl"));
