@@ -213,7 +213,7 @@
                             <Setter.Value>
                                 <ListBox
                                     x:Name="ImagePromptGroupList"
-                                    Width="300"
+                                    Width="400"
                                     Padding="4"
                                     Background="Transparent"
                                     BorderThickness="0"
@@ -227,7 +227,7 @@
                                                 </Style>
                                             </DataTemplate.Resources>
 
-                                            <StackPanel Height="50" Orientation="Horizontal">
+                                            <StackPanel Height="120">
                                                 <i:Interaction.Behaviors>
                                                     <behaviors:AddImageToGroupBehavior />
                                                 </i:Interaction.Behaviors>
@@ -236,6 +236,37 @@
                                                     Margin="0,4"
                                                     FontWeight="SemiBold"
                                                     Text="{Binding Header}" />
+
+                                                <ItemsControl ItemsSource="{Binding ImagePaths}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Horizontal" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate DataType="{x:Type system:String}">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Image
+                                                                    Height="90"
+                                                                    Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                                                    Stretch="Uniform"
+                                                                    Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext}"
+                                                                    ToolTipService.InitialShowDelay="100">
+                                                                    <Image.ToolTip>
+                                                                        <Image
+                                                                            MaxWidth="600"
+                                                                            MaxHeight="600"
+                                                                            Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
+                                                                            Stretch="Uniform" />
+                                                                    </Image.ToolTip>
+                                                                </Image>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+
+                                                </ItemsControl>
+
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
