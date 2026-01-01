@@ -214,11 +214,77 @@
                                 <ListBox
                                     x:Name="ImagePromptGroupList"
                                     Width="400"
+                                    Margin="6"
                                     Padding="4"
                                     Background="Transparent"
                                     BorderThickness="0"
                                     ItemsSource="{Binding PromptGroupListViewModel.Items}"
                                     SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
+                                    <ListBox.Template>
+                                        <ControlTemplate TargetType="ListBox">
+                                            <Border
+                                                Padding="4"
+                                                Background="White"
+                                                BorderBrush="#CCC"
+                                                BorderThickness="1"
+                                                CornerRadius="6">
+
+                                                <ScrollViewer Padding="4">
+                                                    <ItemsPresenter />
+                                                </ScrollViewer>
+
+                                            </Border>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
+
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+
+                                            <!-- 共通 -->
+                                            <Setter Property="Margin" Value="0,2" />
+                                            <Setter Property="Padding" Value="6" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Setter Property="BorderBrush" Value="#DDD" />
+                                            <Setter Property="Background" Value="#F8F8F8" />
+                                            <!-- 非選択時の地味カラー -->
+                                            <Setter Property="SnapsToDevicePixels" Value="True" />
+
+                                            <!-- マウスオーバーの視覚変化は設定しない -->
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <Border
+                                                            x:Name="Bd"
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="4">
+
+                                                            <ContentPresenter Margin="4" VerticalAlignment="Center" />
+                                                        </Border>
+
+                                                        <ControlTemplate.Triggers>
+
+                                                            <!-- 選択時の見た目 -->
+                                                            <Trigger Property="IsSelected" Value="True">
+                                                                <Setter TargetName="Bd" Property="Background" Value="#CCE4FF" />
+                                                                <Setter TargetName="Bd" Property="BorderBrush" Value="#66A9FF" />
+                                                            </Trigger>
+
+                                                            <!-- 非選択時の見た目（地味カラー） -->
+                                                            <Trigger Property="IsSelected" Value="False">
+                                                                <Setter TargetName="Bd" Property="Background" Value="#F8F8F8" />
+                                                                <Setter TargetName="Bd" Property="BorderBrush" Value="#DDD" />
+                                                            </Trigger>
+
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type models:ImagePromptGroup}">
                                             <DataTemplate.Resources>
