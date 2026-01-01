@@ -83,4 +83,13 @@ public class WordNormalizerTests
         Assert.That(normalizer.Normalize("<loral>"), Is.EqualTo(string.Empty));
         Assert.That(normalizer.Normalize("<>"), Is.EqualTo(string.Empty));
     }
+
+    [Test]
+    public void Normalize_Unmatched_parentheses()
+    {
+        Assert.That(normalizer.Normalize("(girl"), Is.EqualTo("girl"));
+        Assert.That(normalizer.Normalize("1girl:0.8)"), Is.EqualTo("girl"));
+        Assert.That(normalizer.Normalize("((girl"), Is.EqualTo("girl"));
+        Assert.That(normalizer.Normalize("1girl:0.8))"), Is.EqualTo("girl"));
+    }
 }
