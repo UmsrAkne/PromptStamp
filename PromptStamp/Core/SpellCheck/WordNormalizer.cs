@@ -58,12 +58,10 @@ namespace PromptStamp.Core.SpellCheck
                 return string.Empty;
             }
 
-            // 例: "(short hair:0.8)" → "short hair:0.8"
-            // カッコをお含む場合は、必然的に文字数が２文字以上になるため、それを条件に含める。
-            while (s.Length >= 2 && s.StartsWith("(") && s.EndsWith(")"))
-            {
-                s = s.Substring(1, s.Length - 2);
-            }
+            // () で単語が区切られている可能性があるため、半角空白に置き換える。
+            // 単語の前後に入ったスペースは後続の Trim で削除される想定。
+            s = s.Replace("(", " ");
+            s = s.Replace(")", " ");
 
             return s;
         }
