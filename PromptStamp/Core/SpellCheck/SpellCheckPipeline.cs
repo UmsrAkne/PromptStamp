@@ -1,19 +1,27 @@
-﻿using PromptStamp.Utils.Log;
+﻿using System;
+using System.IO;
+using PromptStamp.Utils.Log;
 
 namespace PromptStamp.Core.SpellCheck
 {
     public class SpellCheckPipeline
     {
         private readonly WordNormalizer normalizer = new ();
-        private readonly SpellChecker spellChecker = new (
-            "Dictionaries/en_US.aff",
-            "Dictionaries/en_US.dic");
+        private readonly SpellChecker spellChecker;
 
         private readonly IAppLogger logger;
 
         public SpellCheckPipeline(IAppLogger logger)
         {
             this.logger = logger;
+
+            // Resolve dictionary files relative to the application's base directory
+            var baseDir = AppContext.BaseDirectory;
+            var dictDir = Path.Combine(baseDir, "Dictionaries");
+            var affPath = Path.Combine(dictDir, "en_US.aff");
+            var dicPath = Path.Combine(dictDir, "en_US.dic");
+
+            spellChecker = new SpellChecker(affPath, dicPath);
         }
 
         public int LastIssueCount { get; private set; }
