@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace PromptStamp.Core.SpellCheck
 {
@@ -49,6 +50,9 @@ namespace PromptStamp.Core.SpellCheck
 
             // メタデータ（スペルチェック不要な部分）を切り落とす
             text = RemoveMetadataBlock(text);
+
+            // LoRA(<...>) はスペルチェック不要のため削除する。
+            text = Regex.Replace(text, "<[^>]+>", string.Empty);
 
             // 分割
             var tokens = text.Split(Separators, StringSplitOptions.RemoveEmptyEntries);
