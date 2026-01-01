@@ -23,15 +23,21 @@ namespace PromptStamp.Models
 
         private IAppLogger Logger { get; }
 
-        public void ApplyDiffPrompt(string basePrompt)
+        public void ApplyDiffPrompt(string basePrompt, string imagePath = null)
         {
-            Logger.Info($"ApplyDiffPrompt start: Images={ImagePaths.Count}, Diffs={DiffPrompts.Count}");
+            Logger.Info(string.IsNullOrWhiteSpace(imagePath)
+                ? $"ApplyDiffPrompt start: Images={ImagePaths.Count}, Diffs={DiffPrompts.Count}"
+                : $"ApplyDiffPrompt start: Image={imagePath}, Diffs={DiffPrompts.Count}");
 
             var prompt = basePrompt;
 
             prompt = ApplyReplacement(prompt);
 
-            foreach (var path in ImagePaths)
+            var targetPaths = imagePath == null
+                ? ImagePaths
+                : new ObservableCollection<string> { imagePath, };
+
+            foreach (var path in targetPaths)
             {
                 MetadataWriter.Write(path, prompt);
             }

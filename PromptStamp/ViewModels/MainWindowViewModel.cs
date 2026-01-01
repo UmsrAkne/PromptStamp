@@ -196,6 +196,16 @@ public class MainWindowViewModel : BindableBase
             : $"SpellCheck: {issueCount} issues found.");
     });
 
+    public DelegateCommand<string> WriteMetadataToImageCommand => new ((param) =>
+    {
+        if (PromptGroupListViewModel.SelectedItem == null)
+        {
+            return;
+        }
+
+        PromptGroupListViewModel.SelectedItem.ApplyDiffPrompt(CommonPrompt, param);
+    });
+
     [Conditional("DEBUG")]
     private void SetDummies()
     {

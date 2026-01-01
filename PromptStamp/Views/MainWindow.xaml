@@ -388,6 +388,7 @@
                                         Height="90"
                                         Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
                                         Stretch="Uniform"
+                                        Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext}"
                                         ToolTipService.InitialShowDelay="100">
                                         <Image.ToolTip>
                                             <Image
@@ -396,6 +397,18 @@
                                                 Source="{Binding Converter={StaticResource ImagePathToImageSourceConverter}}"
                                                 Stretch="Uniform" />
                                         </Image.ToolTip>
+
+                                        <Image.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem
+                                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.WriteMetadataToImageCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Header="Write metadata" />
+
+                                            </ContextMenu>
+                                        </Image.ContextMenu>
+
+
                                     </Image>
                                 </StackPanel>
                             </DataTemplate>
