@@ -8,6 +8,7 @@ namespace PromptStamp.Core.SpellCheck
     {
         private readonly WordNormalizer normalizer = new ();
         private readonly SpellChecker spellChecker;
+        private readonly bool isSpellCheckEnabled;
 
         private readonly IAppLogger logger;
 
@@ -16,7 +17,24 @@ namespace PromptStamp.Core.SpellCheck
             this.logger = logger;
 
             var (affPath, dicPath) = EnsureDictionaryFiles();
+
+            if (IsDictionaryEmpty(affPath, dicPath))
+            {
+                logger.Warn("[SpellCheck] Dictionary files are empty. Spell check is disabled.");
+                isSpellCheckEnabled = false;
+                return;
+            }
+
             spellChecker = new SpellChecker(affPath, dicPath);
+            return;
+
+            bool IsDictionaryEmpty(string aPath, string dPath)
+            {
+                static bool IsEmpty(string path)
+                    => !File.Exists(path) || new FileInfo(path).Length == 0;
+
+                return IsEmpty(aPath) || IsEmpty(dPath);
+            }
         }
 
         public int LastIssueCount { get; private set; }
@@ -24,6 +42,11 @@ namespace PromptStamp.Core.SpellCheck
         public void Check(string text, string location)
         {
             LastIssueCount = 0;
+
+            if (!isSpellCheckEnabled)
+            {
+                return;
+            }
 
             foreach (var token in TextTokenizer.Tokenize(text))
             {
