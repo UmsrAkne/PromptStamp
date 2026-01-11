@@ -219,7 +219,8 @@
                                     Background="Transparent"
                                     BorderThickness="0"
                                     ItemsSource="{Binding PromptGroupListViewModel.Items}"
-                                    SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
+                                    SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}"
+                                    VirtualizingPanel.ScrollUnit="Pixel">
                                     <ListBox.Template>
                                         <ControlTemplate TargetType="ListBox">
                                             <Border
