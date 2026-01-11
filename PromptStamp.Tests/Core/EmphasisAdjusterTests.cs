@@ -18,11 +18,11 @@ namespace PromptStamp.Tests.Core
         }
 
         [Test]
-        public void PlainWord_Decrease_NoChange()
+        public void PlainWord_Decrease()
         {
             var result = EmphasisAdjuster.Adjust("bbb", -0.1);
 
-            Assert.That(result, Is.EqualTo("bbb"));
+            Assert.That(result, Is.EqualTo("(bbb:0.9)"));
         }
 
         // ----------------------------
@@ -58,11 +58,19 @@ namespace PromptStamp.Tests.Core
         }
 
         [Test]
-        public void Emphasis_Decrease_BelowOne_RemovesSyntax()
+        public void Emphasis_Decrease_FromOne_UpdatesValue()
         {
             var result = EmphasisAdjuster.Adjust("(bbb:1.0)", -0.1);
 
-            Assert.That(result, Is.EqualTo("bbb"));
+            Assert.That(result, Is.EqualTo("(bbb:0.9)"));
+        }
+
+        [Test]
+        public void Emphasis_Decrease_DecrementsValue_EvenIfOne()
+        {
+            var result = EmphasisAdjuster.Adjust("(bbb:0.9)", -0.1);
+
+            Assert.That(result, Is.EqualTo("(bbb:0.8)"));
         }
 
         // ----------------------------

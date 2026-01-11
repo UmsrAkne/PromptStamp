@@ -6,7 +6,9 @@ namespace PromptStamp.Core
 {
     public static class EmphasisAdjuster
     {
+        private const double Step = 0.1;
         private const double MinValue = 0.1;
+        private const double Epsilon = Step / 100;
 
         // (two word:1.1)
         private readonly static Regex EmphasisRegex =
@@ -25,7 +27,7 @@ namespace PromptStamp.Core
             {
                 var newValue = Math.Round(value + delta, 1);
 
-                if (newValue <= 1.0)
+                if (Math.Abs(newValue - 1.0) < Epsilon)
                 {
                     // 1.0 になったら構文解除
                     return word;
@@ -39,7 +41,7 @@ namespace PromptStamp.Core
                 // 通常単語 → 強調構文に変換
                 var newValue = Math.Round(1.0 + delta, 1);
 
-                if (newValue <= 1.0)
+                if (Math.Abs(newValue - 1.0) < Epsilon)
                 {
                     return token;
                 }

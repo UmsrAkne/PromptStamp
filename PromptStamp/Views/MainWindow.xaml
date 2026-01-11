@@ -108,7 +108,11 @@
                                                 BorderThickness="0"
                                                 Text="{Binding CommonPrompt}"
                                                 TextWrapping="Wrap"
-                                                VerticalScrollBarVisibility="Auto" />
+                                                VerticalScrollBarVisibility="Auto">
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:EmphasisSyntaxBehavior />
+                                                </i:Interaction.Behaviors>
+                                            </TextBox>
 
                                         </Border>
                                     </StackPanel>
