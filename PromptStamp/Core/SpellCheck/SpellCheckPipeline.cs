@@ -26,6 +26,7 @@ namespace PromptStamp.Core.SpellCheck
             }
 
             spellChecker = new SpellChecker(affPath, dicPath);
+            isSpellCheckEnabled = true;
             return;
 
             bool IsDictionaryEmpty(string aPath, string dPath)

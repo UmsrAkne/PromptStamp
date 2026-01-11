@@ -108,7 +108,11 @@
                                                 BorderThickness="0"
                                                 Text="{Binding CommonPrompt}"
                                                 TextWrapping="Wrap"
-                                                VerticalScrollBarVisibility="Auto" />
+                                                VerticalScrollBarVisibility="Auto">
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:EmphasisSyntaxBehavior />
+                                                </i:Interaction.Behaviors>
+                                            </TextBox>
 
                                         </Border>
                                     </StackPanel>
@@ -219,7 +223,8 @@
                                     Background="Transparent"
                                     BorderThickness="0"
                                     ItemsSource="{Binding PromptGroupListViewModel.Items}"
-                                    SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}">
+                                    SelectedItem="{Binding PromptGroupListViewModel.SelectedItem}"
+                                    VirtualizingPanel.ScrollUnit="Pixel">
                                     <ListBox.Template>
                                         <ControlTemplate TargetType="ListBox">
                                             <Border
