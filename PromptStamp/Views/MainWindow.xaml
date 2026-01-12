@@ -526,7 +526,7 @@
                 Grid.ColumnSpan="2"
                 Margin="0,8,0,0"
                 FontWeight="SemiBold"
-                IsExpanded="False">
+                IsExpanded="true">
                 <Expander.Header>
                     <TextBlock Text="Application Logs" />
                 </Expander.Header>
@@ -537,15 +537,25 @@
                                 <DataTemplate>
                                     <DockPanel Margin="2,1">
                                         <TextBlock
-                                            Width="140"
+                                            Margin="0,0,5,0"
                                             Foreground="Gray"
-                                            Text="{Binding Timestamp}" />
+                                            Text="{Binding Timestamp, StringFormat=yyyy/MM/dd HH:mm:ss}" />
 
                                         <TextBlock
                                             Width="60"
                                             Margin="0,0,8,0"
-                                            Foreground="#666"
-                                            Text="{Binding Level}" />
+                                            Text="{Binding Level}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#666" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Level}" Value="WARN">
+                                                            <Setter Property="Foreground" Value="Firebrick" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
 
                                         <TextBlock
                                             Foreground="#333"
