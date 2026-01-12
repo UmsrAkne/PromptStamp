@@ -229,6 +229,6 @@ public class MainWindowViewModel : BindableBase
 
         PromptGroupListViewModel.Items = new ObservableCollection<ImagePromptGroup>(files);
 
-        CommonPrompt = "Common Text, Common Text, Common Text, Common Text,Common Text, Common Text,";
+        CommonPrompt = "Common Text, Common Text, text, test, <lora:xxxx:1.0>, test, ";
     }
 }
