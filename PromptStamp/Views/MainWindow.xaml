@@ -194,7 +194,12 @@
                             Height="120"
                             AcceptsReturn="True"
                             BorderThickness="0"
-                            Text="{Binding PendingDiffPrompt.Prompt}" />
+                            Text="{Binding PendingDiffPrompt.Prompt}">
+                            <i:Interaction.Behaviors>
+                                <behaviors:EmphasisSyntaxBehavior />
+                            </i:Interaction.Behaviors>
+                        </TextBox>
+
                     </Border>
                     <Button
                         Width="240"
@@ -432,7 +437,11 @@
                                             BorderThickness="0"
                                             DockPanel.Dock="Top"
                                             FontSize="{StaticResource CommonFontSize}"
-                                            Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
+                                            Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}">
+                                            <i:Interaction.Behaviors>
+                                                <behaviors:EmphasisSyntaxBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
                                     </Border>
                                     <Button
                                         Margin="0,4,0,8"
@@ -472,10 +481,18 @@
                         Height="100"
                         Background="LightCyan"
                         DockPanel.Dock="Bottom"
-                        ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}">
+                        ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}"
+                        SelectedItem="{Binding PromptGroupListViewModel.SelectedItem.SelectedPath}">
                         <i:Interaction.Behaviors>
                             <behaviors:ImageListCutPasteBehavior />
                         </i:Interaction.Behaviors>
+
+                        <ListBox.InputBindings>
+                            <KeyBinding
+                                Key="C"
+                                Command="{Binding PromptGroupListViewModel.SelectedItem.CopyToClipboardCommand}"
+                                Modifiers="Control" />
+                        </ListBox.InputBindings>
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -526,7 +543,7 @@
                 Grid.ColumnSpan="2"
                 Margin="0,8,0,0"
                 FontWeight="SemiBold"
-                IsExpanded="False">
+                IsExpanded="true">
                 <Expander.Header>
                     <TextBlock Text="Application Logs" />
                 </Expander.Header>
@@ -537,21 +554,30 @@
                                 <DataTemplate>
                                     <DockPanel Margin="2,1">
                                         <TextBlock
-                                            Width="140"
+                                            Margin="0,0,5,0"
                                             Foreground="Gray"
-                                            Text="{Binding Timestamp}" />
+                                            Text="{Binding Timestamp, StringFormat=yyyy/MM/dd HH:mm:ss}" />
 
                                         <TextBlock
                                             Width="60"
                                             Margin="0,0,8,0"
-                                            Foreground="#666"
-                                            Text="{Binding Level}" />
+                                            Text="{Binding Level}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#666" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Level}" Value="WARN">
+                                                            <Setter Property="Foreground" Value="Firebrick" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
 
                                         <TextBlock
                                             Foreground="#333"
                                             Text="{Binding Message}"
                                             TextWrapping="Wrap" />
-                                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
                                     </DockPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

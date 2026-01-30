@@ -101,7 +101,9 @@ namespace PromptStamp.Behaviors
             }
 
             var token = tb.Text.Substring(range.Value.Start, range.Value.Length);
-            var newToken = EmphasisAdjuster.Adjust(token, delta);
+            var newToken = LoraStrengthAdjuster.CanHandle(token)
+                ? LoraStrengthAdjuster.Adjust(token, delta)
+                : EmphasisAdjuster.Adjust(token, delta);
 
             tb.Text = tb.Text[..range.Value.Start] + newToken + tb.Text[(range.Value.Start + range.Value.Length) ..];
 
