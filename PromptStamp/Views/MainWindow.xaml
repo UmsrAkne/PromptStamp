@@ -578,7 +578,6 @@
                                             Foreground="#333"
                                             Text="{Binding Message}"
                                             TextWrapping="Wrap" />
-                                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
                                     </DockPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
