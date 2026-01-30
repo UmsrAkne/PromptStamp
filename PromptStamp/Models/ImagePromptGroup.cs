@@ -1,5 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Windows;
+using Prism.Commands;
 using Prism.Mvvm;
 using PromptStamp.Utils;
 using PromptStamp.Utils.Log;
@@ -9,6 +13,7 @@ namespace PromptStamp.Models
     public class ImagePromptGroup : BindableBase
     {
         private string header;
+        private string selectedPath = string.Empty;
 
         public ImagePromptGroup(IAppLogger appLogger)
         {
@@ -20,6 +25,20 @@ namespace PromptStamp.Models
         public ObservableCollection<string> ImagePaths { get; set; } = new ();
 
         public ObservableCollection<DiffPrompt> DiffPrompts { get; set; } = new ();
+
+        public string SelectedPath { get => selectedPath; set => SetProperty(ref selectedPath, value); }
+
+        public DelegateCommand CopyToClipboardCommand => new DelegateCommand(() =>
+        {
+            if (!File.Exists(SelectedPath))
+            {
+                return;
+            }
+
+            var filePaths = new StringCollection { SelectedPath, };
+            Clipboard.SetFileDropList(filePaths);
+            Logger.Info($"Copied {SelectedPath} to clipboard.");
+        });
 
         private IAppLogger Logger { get; }
 

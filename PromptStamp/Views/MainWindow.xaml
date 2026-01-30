@@ -481,10 +481,18 @@
                         Height="100"
                         Background="LightCyan"
                         DockPanel.Dock="Bottom"
-                        ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}">
+                        ItemsSource="{Binding PromptGroupListViewModel.SelectedItem.ImagePaths}"
+                        SelectedItem="{Binding PromptGroupListViewModel.SelectedItem.SelectedPath}">
                         <i:Interaction.Behaviors>
                             <behaviors:ImageListCutPasteBehavior />
                         </i:Interaction.Behaviors>
+
+                        <ListBox.InputBindings>
+                            <KeyBinding
+                                Key="C"
+                                Command="{Binding PromptGroupListViewModel.SelectedItem.CopyToClipboardCommand}"
+                                Modifiers="Control" />
+                        </ListBox.InputBindings>
 
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
