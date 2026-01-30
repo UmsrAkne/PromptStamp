@@ -194,7 +194,12 @@
                             Height="120"
                             AcceptsReturn="True"
                             BorderThickness="0"
-                            Text="{Binding PendingDiffPrompt.Prompt}" />
+                            Text="{Binding PendingDiffPrompt.Prompt}">
+                            <i:Interaction.Behaviors>
+                                <behaviors:EmphasisSyntaxBehavior />
+                            </i:Interaction.Behaviors>
+                        </TextBox>
+
                     </Border>
                     <Button
                         Width="240"
@@ -432,7 +437,11 @@
                                             BorderThickness="0"
                                             DockPanel.Dock="Top"
                                             FontSize="{StaticResource CommonFontSize}"
-                                            Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}" />
+                                            Text="{Binding Prompt, UpdateSourceTrigger=PropertyChanged}">
+                                            <i:Interaction.Behaviors>
+                                                <behaviors:EmphasisSyntaxBehavior />
+                                            </i:Interaction.Behaviors>
+                                        </TextBox>
                                     </Border>
                                     <Button
                                         Margin="0,4,0,8"
